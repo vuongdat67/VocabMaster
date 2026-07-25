@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Volume2, Pencil, Trash2, Check, X } from 'lucide-react'
+import { ArrowLeft, Volume2, Pencil, Trash2, Check, X, RefreshCw } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { wordRepo } from '@/db/word-repo'
 import { useAudio } from '@/hooks/useAudio'
+import { getImageForWord } from '@/lib/image-search'
 import type { Word, PartOfSpeech } from '@/types/word'
 
 export function WordDetailPage() {
@@ -17,6 +18,21 @@ export function WordDetailPage() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [editWord, setEditWord] = useState<Word | null>(null)
+  const [isRefetchingImage, setIsRefetchingImage] = useState(false)
+
+  const handleRefetchImage = async () => {
+    if (!word) return
+    setIsRefetchingImage(true)
+    try {
+      const imgUrl = await getImageForWord(word.word)
+      if (imgUrl) {
+        await wordRepo.update(word.id, { imageUrls: [imgUrl] })
+        setWord({ ...word, imageUrls: [imgUrl] })
+      }
+    } finally {
+      setIsRefetchingImage(false)
+    }
+  }
 
   useEffect(() => {
     if (!id) return
@@ -158,10 +174,24 @@ export function WordDetailPage() {
 
       <Card className="p-6">
         <div className="flex items-start gap-4">
-          {word.imageUrls[0] && (
-            <img src={word.imageUrls[0]} alt={word.word} className="w-24 h-24 object-cover rounded-xl"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-          )}
+          <div className="relative group shrink-0">
+            {word.imageUrls[0] && word.imageUrls[0].includes('/') ? (
+              <img src={word.imageUrls[0]} alt={word.word} className="w-24 h-24 object-cover rounded-xl"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            ) : (
+              <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center text-gray-400 text-xs text-center p-2">
+                Chưa có ảnh
+              </div>
+            )}
+            <button
+              onClick={handleRefetchImage}
+              disabled={isRefetchingImage}
+              title="Đổi ảnh khác"
+              className="absolute -top-2 -right-2 p-1.5 bg-white dark:bg-gray-700 shadow-md rounded-full text-gray-500 hover:text-blue-500 transition-opacity opacity-0 group-hover:opacity-100 disabled:opacity-50 z-10"
+            >
+              <RefreshCw className={`w-4 h-4 ${isRefetchingImage ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <h2 className="text-3xl font-bold text-gray-900">{word.word}</h2>

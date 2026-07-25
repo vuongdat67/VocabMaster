@@ -84,31 +84,19 @@ export function SettingsPage() {
           <label className="block text-sm text-gray-600 mb-3 flex items-center gap-1.5">
             <Layout className="w-3.5 h-3.5" /> Chủ đề
           </label>
-          <div className="flex flex-wrap gap-2">
-            {THEME_PRESETS.map((p) => {
-              const active = settings.themePreset === p.id
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => updateSettings({ themePreset: p.id })}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all"
-                  style={{
-                    borderColor: active ? 'var(--accent-500)' : 'var(--border-default)',
-                    backgroundColor: active
-                      ? 'color-mix(in srgb, var(--accent-500) 10%, var(--surface-card))'
-                      : 'transparent',
-                  }}
-                >
-                  <span className="text-lg">{p.icon}</span>
-                  <span
-                    className="text-sm font-medium"
-                    style={{ color: active ? 'var(--accent-600)' : 'var(--text-secondary)' }}
-                  >
-                    {p.name}
-                  </span>
-                </button>
-              )
-            })}
+          <div className="flex flex-col gap-2">
+            <select
+              value={settings.themePreset}
+              onChange={(e) => updateSettings({ themePreset: e.target.value })}
+              className="w-full p-2.5 rounded-lg border border-gray-200 bg-white text-gray-900"
+              style={{ '--tw-ring-color': 'var(--accent-400)' } as React.CSSProperties}
+            >
+              {THEME_PRESETS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.icon} {p.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

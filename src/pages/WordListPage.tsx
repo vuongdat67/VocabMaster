@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Search, Volume2, BookOpen, Play, X, Upload, Trash2, Image as ImageIcon } from 'lucide-react'
+import { Search, Volume2, BookOpen, Play, X, Upload, Trash2, Image as ImageIcon, Plus, Star, Edit } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -9,6 +9,8 @@ import { wordRepo } from '@/db/word-repo'
 import { progressRepo } from '@/db/progress-repo'
 import { useAudio } from '@/hooks/useAudio'
 import { useLearningSession } from '@/hooks/useLearningSession'
+import { WordEditModal } from '@/components/ui/WordEditModal'
+import { v4 as uuidv4 } from 'uuid'
 import { getImageForWord } from '@/lib/image-search'
 import type { Word, PartOfSpeech } from '@/types/word'
 
@@ -72,6 +74,10 @@ export function WordListPage() {
 	const [studiedIds, setStudiedIds] = useState<Set<string>>(new Set())
 	const [selectedWord, setSelectedWord] = useState<Word | null>(null)
 	const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
+	
+	// CRUD states
+	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [editWord, setEditWord] = useState<Word | null>(null)
 
 	// Dropdown filter states
 	const [statusFilter, setStatusFilter] = useState<'all' | 'studied' | 'unstudied'>('all')
@@ -206,6 +212,54 @@ export function WordListPage() {
 		})
 	}, [])
 
+	const handleToggleMyList = async (word: Word, e: React.MouseEvent) => {
+		e.stopPropagation()
+		const isMyList = word.tags.includes('my-list')
+		const newTags = isMyList ? word.tags.filter(t => t !== 'my-list') : [...word.tags, 'my-list']
+		await wordRepo.update(word.id, { tags: newTags })
+		setWords(prev => prev.map(w => w.id === word.id ? { ...w, tags: newTags } : w))
+		// Update tags list
+		if (!isMyList && !tags.includes('my-list')) setTags(prev => [...prev, 'my-list'])
+	}
+
+	const handleDeleteWord = async (word: Word) => {
+		if (!window.confirm(`Xóa từ "${word.word}"?`)) return
+		await wordRepo.delete(word.id)
+		setWords(prev => prev.filter(w => w.id !== word.id))
+		setSelectedWord(null)
+	}
+
+	const handleSaveWord = async (wordData: Partial<Word>) => {
+		if (editWord) {
+			// Update
+			await wordRepo.update(editWord.id, wordData)
+			setWords(prev => prev.map(w => w.id === editWord.id ? { ...w, ...wordData } as Word : w))
+		} else {
+			// Add new
+			const newWord: Word = {
+				id: uuidv4(),
+				word: wordData.word!,
+				ipa: wordData.ipa || '',
+				partOfSpeech: wordData.partOfSpeech || 'noun',
+				definitions: wordData.definitions || [],
+				examples: wordData.examples || [],
+				synonyms: [],
+				antonyms: [],
+				imageUrls: [],
+				tags: wordData.tags || [],
+				difficulty: wordData.difficulty || 1,
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+			}
+			await wordRepo.add(newWord)
+			setWords(prev => [newWord, ...prev])
+		}
+		
+		// Refresh tags
+		const allTags = await wordRepo.getAllTags()
+		setTags(allTags)
+	}
+
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center h-64">
@@ -218,9 +272,18 @@ export function WordListPage() {
 		<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
 			{/* Heading row with inline filter dropdowns */}
 			<div className="flex flex-wrap items-start gap-3">
-				<div className="min-w-0">
-					<h2 className="text-2xl font-bold text-gray-900 tracking-tight">Từ vựng</h2>
-					<p className="text-sm text-gray-500">{filtered.length} từ</p>
+				<div className="min-w-0 flex items-center gap-4">
+					<div>
+						<h2 className="text-2xl font-bold text-gray-900 tracking-tight">Từ vựng</h2>
+						<p className="text-sm text-gray-500">{filtered.length} từ</p>
+					</div>
+					<Button 
+						size="sm" 
+						icon={<Plus className="w-4 h-4" />}
+						onClick={() => { setEditWord(null); setIsModalOpen(true); }}
+					>
+						Thêm từ mới
+					</Button>
 				</div>
 
 				<div className="flex flex-wrap items-center gap-2 ml-auto">
@@ -361,15 +424,24 @@ export function WordListPage() {
 											<h3 className="font-semibold text-gray-900 text-sm leading-5 truncate">
 												{w.word}
 											</h3>
-											<button
-												onClick={(e) => {
-													e.stopPropagation()
-													speak(w.word)
-												}}
-												className="p-0.5 rounded hover:bg-gray-100 text-gray-400 flex-shrink-0"
-											>
-												<Volume2 className="w-3.5 h-3.5" />
-											</button>
+											<div className="flex items-center">
+												<button
+													onClick={(e) => handleToggleMyList(w, e)}
+													className={`p-1 rounded hover:bg-gray-100 flex-shrink-0 ${w.tags.includes('my-list') ? 'text-yellow-400' : 'text-gray-300'}`}
+													title="Thêm vào Từ vựng của tôi"
+												>
+													<Star className="w-3.5 h-3.5" fill={w.tags.includes('my-list') ? 'currentColor' : 'none'} />
+												</button>
+												<button
+													onClick={(e) => {
+														e.stopPropagation()
+														speak(w.word)
+													}}
+													className="p-1 rounded hover:bg-gray-100 text-gray-400 flex-shrink-0"
+												>
+													<Volume2 className="w-3.5 h-3.5" />
+												</button>
+											</div>
 										</div>
 										{w.ipa && (
 											<p className="text-xs text-gray-400 truncate leading-4">{w.ipa}</p>
@@ -527,21 +599,45 @@ export function WordListPage() {
 									/>
 								</div>
 
-								<Button
-									className="w-full"
-									onClick={async () => {
-										await session.startSession([selectedWord.id])
-										navigate('/learn')
-									}}
-									icon={<Play className="w-4 h-4" />}
-								>
-									Học từ này
-								</Button>
+								<div className="flex gap-2">
+									<Button
+										variant="secondary"
+										className="flex-1"
+										onClick={async () => {
+											await session.startSession([selectedWord.id])
+											navigate('/learn')
+										}}
+										icon={<Play className="w-4 h-4" />}
+									>
+										Học từ này
+									</Button>
+									
+									<Button
+										variant="ghost"
+										onClick={() => { setEditWord(selectedWord); setIsModalOpen(true); }}
+										icon={<Edit className="w-4 h-4" />}
+										title="Sửa từ"
+									/>
+									<Button
+										variant="ghost"
+										className="text-red-500 hover:text-red-600 hover:bg-red-50"
+										onClick={() => handleDeleteWord(selectedWord)}
+										icon={<Trash2 className="w-4 h-4" />}
+										title="Xóa từ"
+									/>
+								</div>
 							</div>
 						</motion.div>
 					</motion.div>
 				)}
 			</AnimatePresence>
+			
+			<WordEditModal 
+				isOpen={isModalOpen}
+				initialData={editWord}
+				onClose={() => setIsModalOpen(false)}
+				onSave={handleSaveWord}
+			/>
 		</motion.div>
 	)
 }

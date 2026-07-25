@@ -6,9 +6,12 @@ import { wordRepo } from '@/db/word-repo'
 import {
   createEngine,
   startLearning as engineStartLearning,
+  advancePhase as engineAdvancePhase,
   processAnswer,
   getCurrentItem,
   setCurrentMode,
+  getBatchWords,
+  getSessionProgress,
   type SessionEngine,
   type SessionPhase,
 } from '@/algorithms/session-engine'
@@ -50,7 +53,7 @@ interface LearningStore {
 
 export const useLearningStore = create<LearningStore>((set, get) => ({
   engine: null,
-  phase: 'list',
+  phase: 'word_preview',
   currentLevel: null,
   currentSession: null,
   currentWordIndex: 0,
@@ -72,7 +75,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
     const engine = createEngine(allWords)
     set({
       engine,
-      phase: 'list',
+      phase: 'word_preview',
       currentLevel: null,
       currentSession: {
         words: allWords,
@@ -90,7 +93,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
       studiedWords: {},
       sessionWordIds: allWords.map((w) => w.id),
       currentWord: null,
-      phaseListWords: allWords,
+      phaseListWords: getBatchWords(engine),
       lastResult: null,
     })
   },
@@ -109,6 +112,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
       currentWord: item?.word ?? null,
       currentWordIndex: 0,
       lastResult: null,
+      phaseListWords: getBatchWords(newEngine),
     })
   },
 
@@ -145,7 +149,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
       result.wordId,
       result.isCorrect,
       result.responseTime,
-      result.wasCloseCall
+      result.wasCloseCall,
     )
     const item = getCurrentItem(newEngine)
 
@@ -155,22 +159,23 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
       studiedUpdate = { [word.id]: word }
     }
 
+    // 4. Update phaseListWords if phase changed to word_preview (new batch)
+    const phaseListUpdate = newEngine.phase === 'word_preview'
+      ? getBatchWords(newEngine)
+      : get().phaseListWords
+
     set({
       engine: newEngine,
       phase: newEngine.phase,
       currentLevel: item?.mode ?? null,
       currentMode: item?.mode ?? null,
       currentWord: item?.word ?? null,
-      currentWordIndex: newEngine.learningWords.length > 0
-        ? newEngine.learningWords.reduce(
-            (found, lw, i) => (lw.word.id === item?.word.id ? i : found),
-            0
-          )
-        : 0,
+      currentWordIndex: newEngine.phaseQueueIndex,
       sessionResults: newResults,
       studiedWords: { ...get().studiedWords, ...studiedUpdate },
       lastResult: { wordId: result.wordId, correct: result.isCorrect },
       isSessionComplete: newEngine.phase === 'complete',
+      phaseListWords: phaseListUpdate,
     })
   },
 
@@ -184,10 +189,15 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
         engine,
         lastResult.wordId,
         lastResult.correct,
-        0, // responseTime — we don't have it stored separately but engine handles it
-        false
+        0,
+        false,
       )
       const item = getCurrentItem(newEngine)
+
+      const phaseListUpdate = newEngine.phase === 'word_preview'
+        ? getBatchWords(newEngine)
+        : get().phaseListWords
+
       set({
         engine: newEngine,
         phase: newEngine.phase,
@@ -196,6 +206,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
         currentWord: item?.word ?? null,
         lastResult: null,
         isSessionComplete: newEngine.phase === 'complete',
+        phaseListWords: phaseListUpdate,
       })
     } else {
       const item = getCurrentItem(engine)
@@ -256,7 +267,7 @@ export const useLearningStore = create<LearningStore>((set, get) => ({
   resetSession: () => {
     set({
       engine: null,
-      phase: 'list',
+      phase: 'word_preview',
       currentLevel: null,
       currentSession: null,
       currentWordIndex: 0,

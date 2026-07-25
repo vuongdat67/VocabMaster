@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Image, Search, Check, Loader2, X } from 'lucide-react'
+import { Image, Search, Check, Loader2, X, RefreshCw, Trash2 } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { wordRepo } from '@/db/word-repo'
@@ -161,8 +161,19 @@ export function ImageManagerPage() {
 					pw.id === word.id ? { ...pw, imageUrls: [imgUrl] } : pw
 				)
 			)
-			setStatus(`Đã thêm ảnh cho "${word.word}"`)
+			setStatus(`Đã cập nhật ảnh cho "${word.word}"`)
 		}
+	}, [])
+
+	const handleDeleteImage = useCallback(async (word: Word) => {
+		if (!window.confirm(`Xóa ảnh của từ "${word.word}"?`)) return
+		await wordRepo.update(word.id, { imageUrls: [] })
+		setWords((prev) =>
+			prev.map((pw) =>
+				pw.id === word.id ? { ...pw, imageUrls: [] } : pw
+			)
+		)
+		setStatus(`Đã xóa ảnh của "${word.word}"`)
 	}, [])
 
 	if (loading) {
@@ -309,7 +320,7 @@ export function ImageManagerPage() {
 						<Card className="p-0 overflow-hidden hover:shadow-lg transition-shadow group">
 							{/* Image area */}
 							<div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-								{w.imageUrls[0] ? (
+								{w.imageUrls[0] && w.imageUrls[0].includes('/') ? (
 									<img
 										src={w.imageUrls[0]}
 										alt={w.word}
@@ -338,10 +349,30 @@ export function ImageManagerPage() {
 									<div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
 										<button
 											onClick={() => handleSingleFetch(w)}
-											className="opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-white/90 rounded-lg var(--accent-600) hover:bg-white shadow"
+											className="opacity-0 group-hover:opacity-100 transition-opacity p-2 bg-white/90 rounded-lg text-blue-600 hover:bg-white shadow"
 											title="Tìm ảnh cho từ này"
 										>
-											<Search className="w-4 h-4" />
+											<Search className="w-5 h-5" />
+										</button>
+									</div>
+								)}
+
+								{/* Overlay actions for words WITH images */}
+								{w.imageUrls[0] && !processing && (
+									<div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+										<button
+											onClick={(e) => { e.stopPropagation(); handleSingleFetch(w); }}
+											className="p-2 bg-white/90 rounded-lg text-blue-600 hover:bg-white shadow transition-transform hover:scale-110"
+											title="Đổi ảnh khác"
+										>
+											<RefreshCw className="w-4 h-4" />
+										</button>
+										<button
+											onClick={(e) => { e.stopPropagation(); handleDeleteImage(w); }}
+											className="p-2 bg-white/90 rounded-lg text-red-600 hover:bg-white shadow transition-transform hover:scale-110"
+											title="Xóa ảnh"
+										>
+											<Trash2 className="w-4 h-4" />
 										</button>
 									</div>
 								)}

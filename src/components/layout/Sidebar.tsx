@@ -2,9 +2,11 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
-  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera,
+  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
+import { useSettingsStore } from '@/stores/settings-store'
+import { ThemeSwitcher } from '@/components/ui/ThemeSwitcher'
 
 const mainLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -28,6 +30,8 @@ const bottomLinks = [
 
 export function Sidebar() {
   const { sidebarOpen, toggleSidebar } = useUIStore()
+  const soundEnabled = useSettingsStore(state => state.settings.soundEnabled)
+  const updateSettings = useSettingsStore(state => state.updateSettings)
 
   return (
     <AnimatePresence mode="wait">
@@ -35,7 +39,7 @@ export function Sidebar() {
         initial={{ width: sidebarOpen ? 240 : 64 }}
         animate={{ width: sidebarOpen ? 240 : 64 }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="h-screen bg-white border-r border-gray-200 flex flex-col overflow-hidden shrink-0"
+        className="h-screen bg-white border-r border-gray-200 flex flex-col overflow-hidden shrink-0 z-20"
       >
         {/* ── Logo ── */}
         <div className="h-14 flex items-center justify-between px-3 border-b border-gray-100">
@@ -63,7 +67,7 @@ export function Sidebar() {
         </div>
 
         {/* ── Nav links ── */}
-        <nav className="flex-1 py-3 space-y-0.5 px-2 overflow-y-auto">
+        <nav className="flex-1 py-3 space-y-0.5 px-2 overflow-y-auto scrollbar-thin">
           {sidebarOpen && (
             <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
               Học tập
@@ -90,11 +94,24 @@ export function Sidebar() {
         </nav>
 
         {/* ── Footer ── */}
-        {sidebarOpen && (
-          <div className="px-4 py-3 border-t border-gray-100">
-            <p className="text-[11px] text-gray-400">VocabMaster &middot; v0.1</p>
-          </div>
-        )}
+        <div className="px-2 py-3 border-t border-gray-100 flex flex-col gap-1 overflow-visible">
+          <ThemeSwitcher sidebarOpen={sidebarOpen} />
+          
+          <button
+            onClick={() => updateSettings({ soundEnabled: !soundEnabled })}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 text-gray-500 hover:text-gray-700 hover:bg-gray-50 w-full"
+            title="Bật/tắt nhạc nền"
+          >
+            {soundEnabled ? <Music className="w-[18px] h-[18px] shrink-0" /> : <VolumeX className="w-[18px] h-[18px] shrink-0" />}
+            {sidebarOpen && <span className="text-sm font-medium whitespace-nowrap">Nhạc nền</span>}
+          </button>
+
+          {sidebarOpen && (
+            <div className="px-2 mt-2">
+              <p className="text-[11px] text-gray-400">VocabMaster &middot; v0.1</p>
+            </div>
+          )}
+        </div>
       </motion.aside>
     </AnimatePresence>
   )

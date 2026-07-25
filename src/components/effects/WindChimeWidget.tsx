@@ -33,7 +33,7 @@ export function WindChimeWidget() {
  const dragStart = useRef({ x: 0, y: 0 })
  const { settings, updateSettings } = useSettingsStore()
 
- const isSoundOn = settings.soundEnabled && soundEnabled
+ const isSoundOn = soundEnabled
 
  // Random wind chime when idle
  useEffect(() => {
@@ -45,15 +45,12 @@ export function WindChimeWidget() {
  }, [isSoundOn, isOpen])
 
  const handleToggle = useCallback(() => {
- const next = !isSoundOn
- setSoundEnabledLocal(next)
- if (next) {
- playWindChime(0.5)
- updateSettings({ soundEnabled: true })
- } else {
- updateSettings({ soundEnabled: false })
- }
- }, [isSoundOn, updateSettings])
+  const next = !isSoundOn
+  setSoundEnabledLocal(next)
+  if (next) {
+  playWindChime(0.5)
+  }
+  }, [isSoundOn])
 
  const handleChimeClick = useCallback(() => {
  playWindChime(0.7)
@@ -175,16 +172,16 @@ export function WindChimeWidget() {
  initial={{ opacity: 0, y: -8, scale: 0.96 }}
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: -8, scale: 0.96 }}
- className="absolute bottom-full right-0 mb-3 w-56 bg-white/80 backdrop-blur-xl rounded-2xl border border-gray-200/60 shadow-xl overflow-hidden"
+ className="absolute bottom-full right-0 mb-3 w-56 bg-base-100/90 backdrop-blur-xl rounded-2xl border border-base-300 shadow-xl overflow-hidden"
  >
  <div className="p-3 space-y-3">
  <div className="flex items-center justify-between">
- <span className="text-xs font-semibold text-gray-600 ">
+ <span className="text-xs font-semibold text-base-content/70">
  🎐 Gió
  </span>
  <button
  onClick={(e) => { e.stopPropagation(); setIsOpen(false) }}
- className="p-0.5 rounded hover:bg-gray-100 :bg-gray-800 text-gray-400"
+ className="p-0.5 rounded hover:bg-base-200 text-base-content/50"
  >
  <X className="w-3 h-3" />
  </button>
@@ -192,13 +189,13 @@ export function WindChimeWidget() {
 
  {/* Sound toggle */}
  <div className="flex items-center justify-between">
- <span className="text-xs text-gray-500 ">Âm thanh</span>
+ <span className="text-xs text-base-content/70">Âm thanh</span>
  <button
  onClick={(e) => { e.stopPropagation(); handleToggle() }}
  className={`relative w-9 h-5 rounded-full transition-colors ${
  isSoundOn
- ? 'bg-indigo-500'
- : 'bg-gray-300 '
+ ? 'bg-primary'
+ : 'bg-base-300'
  }`}
  >
  <motion.div
@@ -213,8 +210,8 @@ export function WindChimeWidget() {
  {isSoundOn && (
  <div>
  <div className="flex items-center justify-between">
- <span className="text-xs text-gray-500 ">Âm lượng</span>
- <span className="text-[10px] text-gray-400">{Math.round(volume * 100)}%</span>
+ <span className="text-xs text-base-content/70">Âm lượng</span>
+ <span className="text-[10px] text-base-content/50">{Math.round(volume * 100)}%</span>
  </div>
  <input
  type="range"
@@ -232,7 +229,7 @@ export function WindChimeWidget() {
 
  {/* Size picker */}
  <div>
- <span className="text-xs text-gray-500 block mb-1">Kích thước</span>
+ <span className="text-xs text-base-content/70 block mb-1">Kích thước</span>
  <div className="flex gap-1">
  {(['small', 'medium', 'large'] as SizeVariant[]).map((s) => (
  <button
@@ -240,8 +237,8 @@ export function WindChimeWidget() {
  onClick={(e) => { e.stopPropagation(); setSize(s) }}
  className={`flex-1 py-1 text-xs rounded-lg transition-colors ${
  size === s
- ? 'bg-indigo-100 text-indigo-700 '
- : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+ ? 'bg-primary/20 text-primary'
+ : 'bg-base-200 text-base-content/60 hover:bg-base-300'
  }`}
  >
  {s === 'small' ? 'Nhỏ' : s === 'medium' ? 'Vừa' : 'Lớn'}
@@ -257,13 +254,13 @@ export function WindChimeWidget() {
  e.stopPropagation()
  playCelebrationBells()
  }}
- className="w-full py-1.5 text-xs rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-600 hover:from-indigo-100 hover:to-purple-100 transition-colors border border-indigo-200/50 "
+ className="w-full py-1.5 text-xs rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/20"
  >
  🎵 Thử chuông gió
  </button>
  )}
 
- <p className="text-[10px] text-gray-400 text-center">
+ <p className="text-[10px] text-base-content/40 text-center">
  Kéo icon để di chuyển
  </p>
  </div>

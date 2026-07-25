@@ -355,12 +355,11 @@ export function HomePage() {
                   className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 transition-all duration-300 ring-1 ring-gray-200 group-hover:ring-2 group-hover:shadow-[var(--shadow-card)]"
                   style={{ '--tw-ring-color': 'var(--accent-300)' } as React.CSSProperties}
                 >
-                  {w.imageUrls[0] ? (
+                  {w.imageUrls[0] && w.imageUrls[0].includes('/') ? (
                     <img
                       src={w.imageUrls[0]}
                       alt={w.word}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      loading="lazy"
                     />
                   ) : (
                     <div

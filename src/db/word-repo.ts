@@ -1,33 +1,41 @@
 import { db } from './database'
 import type { Word, WordPack } from '@/types/word'
 
+function sanitizeWord(w: Word): Word {
+  if (w.imageUrls?.length > 0) {
+    w.imageUrls = w.imageUrls.filter(url => url && (url.includes('/') || url.includes(':')))
+  }
+  return w
+}
+
 export const wordRepo = {
   async getAll(): Promise<Word[]> {
-    return db.words.toArray()
+    return (await db.words.toArray()).map(sanitizeWord)
   },
 
   async getById(id: string): Promise<Word | undefined> {
-    return db.words.get(id)
+    const w = await db.words.get(id)
+    return w ? sanitizeWord(w) : undefined
   },
 
   async getByTag(tag: string): Promise<Word[]> {
-    return db.words.where('tags').equals(tag).toArray()
+    return (await db.words.where('tags').equals(tag).toArray()).map(sanitizeWord)
   },
 
   async getByDifficulty(level: 1 | 2 | 3 | 4 | 5): Promise<Word[]> {
-    return db.words.where('difficulty').equals(level).toArray()
+    return (await db.words.where('difficulty').equals(level).toArray()).map(sanitizeWord)
   },
 
   async search(query: string): Promise<Word[]> {
     const lower = query.toLowerCase()
-    return db.words
+    return (await db.words
       .filter(
         (w) =>
           w.word.toLowerCase().includes(lower) ||
           w.definitions.some((d) => d.vietnamese.toLowerCase().includes(lower)) ||
           w.definitions.some((d) => d.meaning.toLowerCase().includes(lower))
       )
-      .toArray()
+      .toArray()).map(sanitizeWord)
   },
 
   async count(): Promise<number> {
@@ -64,17 +72,17 @@ export const wordRepo = {
 
   /** Get words by a list of ids, used for session loading */
   async getByIds(ids: string[]): Promise<Word[]> {
-    return db.words.where('id').anyOf(ids).toArray()
+    return (await db.words.where('id').anyOf(ids).toArray()).map(sanitizeWord)
   },
 
   /** Get words NOT yet studied (no SRS data) */
   async getUnstudied(limit: number): Promise<Word[]> {
     const srsEntries = await db.srsData.toArray()
     const studiedIds = new Set(srsEntries.map((s) => s.wordId))
-    return db.words
+    return (await db.words
       .filter((w) => !studiedIds.has(w.id))
       .limit(limit)
-      .toArray()
+      .toArray()).map(sanitizeWord)
   },
 
   // --- Word Packs ---
@@ -93,6 +101,6 @@ export const wordRepo = {
   async getWordsByPack(packId: string): Promise<Word[]> {
     const pack = await db.wordPacks.get(packId)
     if (!pack) return []
-    return db.words.where('tags').anyOf(pack.tags).toArray()
+    return (await db.words.where('tags').anyOf(pack.tags).toArray()).map(sanitizeWord)
   },
 }

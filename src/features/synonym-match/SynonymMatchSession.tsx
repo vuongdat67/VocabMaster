@@ -10,6 +10,7 @@ import { playCorrectSound, playWrongSound } from '@/lib/audio-utils'
 
 interface Props {
   word: Word
+  learnedWords?: Word[]
   onComplete: (correct: boolean, responseTime: number) => void
 }
 
@@ -19,7 +20,7 @@ interface SynonymPair {
   word2: string
 }
 
-export function SynonymMatchSession({ word, onComplete }: Props) {
+export function SynonymMatchSession({ word, learnedWords, onComplete }: Props) {
   const [pairs, setPairs] = useState<SynonymPair[]>([])
   const [leftWords, setLeftWords] = useState<{ id: string; text: string }[]>([])
   const [rightWords, setRightWords] = useState<{ id: string; text: string }[]>([])
@@ -45,18 +46,24 @@ export function SynonymMatchSession({ word, onComplete }: Props) {
     mistakes.current = 0
 
     async function load() {
-      const all = await wordRepo.getAll()
+      let all = learnedWords || []
 
-      // Build a pool of relevant distractor words:
-      // 1st priority — words sharing tags with the current word (same study pack)
-      // 2nd priority — same difficulty level
-      // NEVER random words from other contexts
-      const sameTag = shuffle(
+      let sameTag = shuffle(
         all.filter((w) => w.id !== word.id && w.tags.some((t) => word.tags.includes(t)))
       )
-      const sameDifficulty = shuffle(
+      let sameDifficulty = shuffle(
         all.filter((w) => w.id !== word.id && w.difficulty === word.difficulty)
       )
+
+      if (!learnedWords || (sameTag.length < 4 && sameDifficulty.length < 4)) {
+        all = await wordRepo.getAll()
+        sameTag = shuffle(
+          all.filter((w) => w.id !== word.id && w.tags.some((t) => word.tags.includes(t)))
+        )
+        sameDifficulty = shuffle(
+          all.filter((w) => w.id !== word.id && w.difficulty === word.difficulty)
+        )
+      }
 
       const synPairs: SynonymPair[] = []
 

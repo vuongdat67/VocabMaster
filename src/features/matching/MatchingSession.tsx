@@ -11,6 +11,7 @@ import { playCorrectSound, playWrongSound } from '@/lib/audio-utils'
 
 interface Props {
   word: Word
+  learnedWords?: Word[]
   onComplete: (correct: boolean, responseTime: number) => void
 }
 
@@ -20,7 +21,7 @@ interface MatchPair {
   imageUrl: string
 }
 
-export function MatchingSession({ word, onComplete }: Props) {
+export function MatchingSession({ word, learnedWords, onComplete }: Props) {
   const [pairs, setPairs] = useState<MatchPair[]>([])
   const [shuffledWords, setShuffledWords] = useState<{ id: string; word: string; vi: string }[]>([])
   const [shuffledImages, setShuffledImages] = useState<{ id: string; url: string }[]>([])
@@ -48,9 +49,14 @@ export function MatchingSession({ word, onComplete }: Props) {
     mistakes.current = 0
 
     async function load() {
-      const all = await wordRepo.getAll()
-      const others = all.filter((w) => w.id !== word.id && w.imageUrls.length > 0)
-      const selected = shuffle(others).slice(0, 5)
+      let pool = learnedWords?.filter((w) => w.id !== word.id && w.imageUrls.length > 0) || []
+
+      if (pool.length < 2) {
+        const all = await wordRepo.getAll()
+        pool = all.filter((w) => w.id !== word.id && w.imageUrls.length > 0)
+      }
+
+      const selected = shuffle(pool).slice(0, 5)
       const matches = [word, ...selected]
 
       const withImages = matches.filter((w) => w.imageUrls[0])

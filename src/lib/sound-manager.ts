@@ -9,13 +9,35 @@
 
 let audioCtx: AudioContext | null = null
 
+let userInteracted = false
+let shouldPlayAmbient = false
+let ambientIntensity = 0.3
+
+if (typeof window !== 'undefined') {
+  const onInteract = () => {
+    if (userInteracted) return
+    userInteracted = true
+    window.removeEventListener('click', onInteract)
+    window.removeEventListener('keydown', onInteract)
+    window.removeEventListener('touchstart', onInteract)
+    
+    if (shouldPlayAmbient) {
+      startWindAmbient(ambientIntensity)
+    }
+  }
+  window.addEventListener('click', onInteract, { once: true })
+  window.addEventListener('keydown', onInteract, { once: true })
+  window.addEventListener('touchstart', onInteract, { once: true })
+}
+
 function getContext(): AudioContext | null {
+  if (!userInteracted) return null
   try {
     if (!audioCtx) {
       audioCtx = new AudioContext()
     }
     if (audioCtx.state === 'suspended') {
-      audioCtx.resume()
+      audioCtx.resume().catch(() => {})
     }
     return audioCtx
   } catch {
@@ -69,52 +91,30 @@ export function playWindChime(intensity: number = 0.5): void {
   }
 }
 
-// ─── Wind Ambient ──────────────────────────────────────────────
-// Very soft wind-like noise — nearly silent, barely there
-
-let windNode: { stop: () => void } | null = null
+// ─── Background Music ──────────────────────────────────────────────
+let bgmAudio: HTMLAudioElement | null = null
+let isBgmPlaying = false
 
 export function startWindAmbient(intensity: number = 0.3): void {
-  const ctx = getContext()
-  if (!ctx) return
-
-  stopWindAmbient()
-
-  const bufferSize = ctx.sampleRate * 2
-  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
-  const data = buffer.getChannelData(0)
-
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 + Math.sin(i / 200)) * 0.4
+  shouldPlayAmbient = true
+  if (!bgmAudio) {
+    // Free Lofi track from Pixabay
+    bgmAudio = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3')
+    bgmAudio.loop = true
+    bgmAudio.volume = 0.15
   }
-
-  const source = ctx.createBufferSource()
-  source.buffer = buffer
-  source.loop = true
-
-  const filter = ctx.createBiquadFilter()
-  filter.type = 'lowpass'
-  filter.frequency.value = 200 * intensity + 50
-  filter.Q.value = 0.5
-
-  const gain = ctx.createGain()
-  gain.gain.value = 0.06 * intensity
-
-  source.connect(filter)
-  filter.connect(gain)
-  gain.connect(ctx.destination)
-  source.start()
-
-  windNode = {
-    stop: () => {
-      try { source.stop() } catch { /* ignore */ }
-      windNode = null
-    },
+  if (!isBgmPlaying && userInteracted) {
+    bgmAudio.play().catch(() => {})
+    isBgmPlaying = true
   }
 }
 
 export function stopWindAmbient(): void {
-  windNode?.stop()
+  shouldPlayAmbient = false
+  if (bgmAudio && isBgmPlaying) {
+    bgmAudio.pause()
+    isBgmPlaying = false
+  }
 }
 
 // ─── Paper Rustle ──────────────────────────────────────────────

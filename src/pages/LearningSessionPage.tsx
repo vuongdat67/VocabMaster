@@ -16,9 +16,23 @@ import { TypingChallengeSession } from '@/features/typing-challenge/TypingChalle
 import { FillBlankSession } from '@/features/fill-blank/FillBlankSession'
 import { MatchingSession } from '@/features/matching/MatchingSession'
 import { SynonymMatchSession } from '@/features/synonym-match/SynonymMatchSession'
+import { WordPreviewStep } from '@/features/word-preview/WordPreviewStep'
 import { CelebrationEffect } from '@/components/effects/CelebrationEffect'
-import { getLevelName } from '@/algorithms/session-engine'
+import { getLevelName, getSessionProgress } from '@/algorithms/session-engine'
 import { playCorrectSound, playWrongSound, playClickSound } from '@/lib/audio-utils'
+
+/** Phase display names */
+const PHASE_LABELS: Record<string, string> = {
+  word_preview: 'Xem từ mới',
+  flashcard: 'Flashcard',
+  fill_challenge: 'Điền từ',
+  audio_challenge: 'Nghe chọn',
+  retry_loop: 'Ôn lại',
+  matching: 'Ghép cặp',
+  synonym_match: 'Đồng nghĩa',
+  batch_complete: 'Hoàn thành batch',
+  complete: 'Hoàn thành',
+}
 
 export function LearningSessionPage() {
   const navigate = useNavigate()
@@ -33,12 +47,32 @@ export function LearningSessionPage() {
   const { speak } = useAudio()
 
   useEffect(() => {
-    wordRepo.getWordPacks().then(setPacks)
+    async function load() {
+      const allPacks = await wordRepo.getWordPacks()
+      const myListWords = await wordRepo.getByTag('my-list')
+      if (myListWords.length > 0) {
+        allPacks.unshift({
+          id: 'virtual-my-list',
+          name: 'Từ vựng của tôi',
+          description: 'Danh sách các từ vựng bạn đã đánh dấu sao.',
+          wordCount: myListWords.length,
+          difficulty: 'beginner',
+          tags: ['my-list']
+        })
+      }
+      setPacks(allPacks)
+    }
+    load()
   }, [])
 
   const handleStart = useCallback(async () => {
     if (!selectedPack) return
-    const words = await wordRepo.getWordsByPack(selectedPack)
+    let words = []
+    if (selectedPack === 'virtual-my-list') {
+      words = await wordRepo.getByTag('my-list')
+    } else {
+      words = await wordRepo.getWordsByPack(selectedPack)
+    }
     await session.startSession(words.map((w) => w.id))
   }, [selectedPack, session])
 
@@ -83,7 +117,7 @@ export function LearningSessionPage() {
         setTimeout(() => setShowCelebration(false), 1200)
       }
     },
-    [session]
+    [session],
   )
 
   const handleContinue = useCallback(() => {
@@ -183,39 +217,22 @@ export function LearningSessionPage() {
     )
   }
 
-  // ── Phase LIST: show all words before learning ──
-  if (session.phase === 'list' && session.phaseListWords.length > 0) {
+  // ── Phase WORD_PREVIEW: show batch words before learning ──
+  if (session.phase === 'word_preview' && session.phaseListWords.length > 0) {
+    const progress = session.engine ? getSessionProgress(session.engine) : null
+
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-5xl mx-auto space-y-6">
         <button onClick={() => navigate('/')} className="flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Quay lại
         </button>
 
-        <div className="text-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Danh sách từ vựng</h2>
-          <p className="text-gray-500 mt-1">{session.phaseListWords.length} từ — hãy xem qua trước khi bắt đầu</p>
-        </div>
-
-        {/* Word grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {session.phaseListWords.map((w) => (
-            <Card key={w.id} className="p-3 text-center" compact>
-              <p className="text-sm font-semibold text-gray-900 truncate">{w.word}</p>
-              <p className="text-[11px] text-gray-500 truncate mt-0.5">
-                {w.definitions[0]?.vietnamese ?? ''}
-              </p>
-              {w.imageUrls[0] && (
-                <img src={w.imageUrls[0]} alt="" className="w-full h-16 object-cover rounded-lg mt-2" />
-              )}
-            </Card>
-          ))}
-        </div>
-
-        <div className="flex justify-center pt-2 pb-8">
-          <Button size="lg" onClick={handleBeginLearning} icon={<Play className="w-5 h-5" />}>
-            Bắt đầu học ngay
-          </Button>
-        </div>
+        <WordPreviewStep
+          words={session.phaseListWords}
+          batchIndex={progress?.batchIndex ?? 0}
+          totalBatches={progress?.totalBatches ?? 1}
+          onStart={handleBeginLearning}
+        />
       </motion.div>
     )
   }
@@ -295,6 +312,8 @@ export function LearningSessionPage() {
   const currentWord = session.currentWord
   const mode = session.currentMode
   const level = session.currentLevel
+  const progress = session.engine ? getSessionProgress(session.engine) : null
+  const phaseLabel = PHASE_LABELS[session.phase] ?? session.phase
 
   if (!currentWord || !mode || !level) {
     return (
@@ -306,6 +325,9 @@ export function LearningSessionPage() {
     )
   }
 
+  // Get learned words for matching/synonym phases
+  const learnedWords = session.engine?.completedInSession ?? []
+
   return (
     <div className="max-w-3xl mx-auto space-y-4">
       {/* Progress header */}
@@ -316,26 +338,51 @@ export function LearningSessionPage() {
         <div className="flex-1">
           <div className="flex justify-between text-sm mb-1">
             <span className="text-gray-500 flex items-center gap-1">
-              {session.currentWordIndex + 1} / {Math.max(1, (session.engine?.learningWords.length ?? 0) + (session.engine?.newWords.length ?? 0))}
-              {session.engine && session.lastResult && (
-                <span className="ml-2 text-xs text-gray-400">
-                  (đã qua {session.engine.learningWords.filter(lw => lw.totalResponses > 0).length + session.engine.reviewWords.length} từ)
-                </span>
+              {progress ? (
+                <>
+                  Batch {progress.batchIndex + 1}/{progress.totalBatches}
+                  <span className="ml-2 text-xs text-gray-400">
+                    ({progress.wordsCompleted}/{progress.totalWords} từ)
+                  </span>
+                </>
+              ) : (
+                `${session.currentWordIndex + 1} / ${Math.max(1, (session.engine?.batchWords.length ?? 0))}`
               )}
             </span>
             <span className="font-medium capitalize flex items-center gap-1.5" style={{ color: 'var(--accent-600)' }}>
               <Eye className="w-3.5 h-3.5" />
-              {getLevelName(level)}
+              {phaseLabel} — {getLevelName(level)}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <motion.div
-              className="h-full rounded-full"
-              style={{ backgroundColor: 'var(--accent-500)' }}
-              initial={{ width: 0 }}
-              animate={{ width: `${((session.currentWordIndex) / Math.max(1, (session.engine?.learningWords.length ?? 0) + (session.engine?.newWords.length ?? 0))) * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
+          {/* Dual progress bars */}
+          <div className="space-y-1">
+            {/* Phase progress within batch */}
+            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ backgroundColor: 'var(--accent-500)' }}
+                initial={{ width: 0 }}
+                animate={{
+                  width: `${session.engine
+                    ? ((session.engine.phaseQueueIndex + 1) / Math.max(1, session.engine.phaseQueue.length)) * 100
+                    : 0}%`,
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+            {/* Overall session progress */}
+            {progress && (
+              <div className="w-full bg-gray-100 rounded-full h-1 overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: 'var(--accent-300)' }}
+                  animate={{
+                    width: `${(progress.wordsCompleted / Math.max(1, progress.totalWords)) * 100}%`,
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            )}
           </div>
         </div>
         <Button variant="ghost" size="sm" onClick={handleEndSession}>Kết thúc</Button>
@@ -367,10 +414,10 @@ export function LearningSessionPage() {
             <FillBlankSession word={currentWord} onComplete={(correct, time) => handleAnswer(correct, time)} />
           )}
           {mode === 'matching' && (
-            <MatchingSession word={currentWord} onComplete={(correct, time) => handleAnswer(correct, time)} />
+            <MatchingSession word={currentWord} learnedWords={learnedWords} onComplete={(correct, time) => handleAnswer(correct, time)} />
           )}
           {mode === 'synonym_match' && (
-            <SynonymMatchSession word={currentWord} onComplete={(correct, time) => handleAnswer(correct, time)} />
+            <SynonymMatchSession word={currentWord} learnedWords={learnedWords} onComplete={(correct, time) => handleAnswer(correct, time)} />
           )}
         </motion.div>
       </AnimatePresence>
