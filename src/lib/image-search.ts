@@ -80,7 +80,8 @@ export async function getImageForWord(word: string): Promise<string> {
     const results = await searchUnsplash(word)
     if (results.length > 0) return results[0]!
   }
-  return generatePlaceholder(word)
+  // No Unsplash key: use DiceBear API (free, no key required)
+  return `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(word)}&backgroundColor=6366f1&textColor=ffffff`
 }
 
 /** Batch-fetch images for many words, with concurrency control */
