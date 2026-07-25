@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ─── Tailwind dark mode class-based ──────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Dynamic Accent Color System ─────────────── */
+[data-theme-color="indigo"] { --a50: #eef2ff; --a100: #e0e7ff; --a200: #c7d2fe; --a300: #a5b4fc; --a400: #818cf8; --a500: #6366f1; --a600: #4f46e5; --a700: #4338ca; --a800: #3730a3; --a900: #312e81; --a950: #1e1b4b; }
+[data-theme-color="blue"]  { --a50: #eff6ff; --a100: #dbeafe; --a200: #bfdbfe; --a300: #93c5fd; --a400: #60a5fa; --a500: #3b82f6; --a600: #2563eb; --a700: #1d4ed8; --a800: #1e40af; --a900: #1e3a8a; --a950: #172554; }
+[data-theme-color="green"] { --a50: #ecfdf5; --a100: #d1fae5; --a200: #a7f3d0; --a300: #6ee7b7; --a400: #34d399; --a500: #10b981; --a600: #059669; --a700: #047857; --a800: #065f46; --a900: #064e3b; --a950: #022c22; }
+[data-theme-color="rose"] { --a50: #fff1f2; --a100: #ffe4e6; --a200: #fecdd3; --a300: #fda4af; --a400: #fb7185; --a500: #f43f5e; --a600: #e11d48; --a700: #be123c; --a800: #9f1239; --a900: #881337; --a950: #4c0519; }
+[data-theme-color="amber"] { --a50: #fffbeb; --a100: #fef3c7; --a200: #fde68a; --a300: #fcd34d; --a400: #fbbf24; --a500: #f59e0b; --a600: #d97706; --a700: #b45309; --a800: #92400e; --a900: #78350f; --a950: #451a03; }
+
+/* Map accent variables so all code uses --accent-* */
+:root {
+  --accent-50: var(--a50);
+  --accent-100: var(--a100);
+  --accent-200: var(--a200);
+  --accent-300: var(--a300);
+  --accent-400: var(--a400);
+  --accent-500: var(--a500);
+  --accent-600: var(--a600);
+  --accent-700: var(--a700);
+  --accent-800: var(--a800);
+  --accent-900: var(--a900);
+  --accent-950: var(--a950);
+
+  /* Surface tokens — light mode defaults */
+  --surface: #ffffff;
+  --surface-secondary: #f9fafb;
+  --surface-tertiary: #f3f4f6;
+  --surface-card: #ffffff;
+  --surface-elevated: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6b7280;
+  --text-placeholder: #9ca3af;
+
+  --border-default: #d1d5db;
+  --border-light: #e5e7eb;
+  --border-hover: #9ca3af;
+
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-elevated: 0 10px 25px -5px rgb(0 0 0 / 0.08), 0 4px 10px -6px rgb(0 0 0 / 0.04);
+}
+
+/* Dark mode tokens — inspired by zinc premium palette */
+.dark {
+  --surface: #111113;
+  --surface-secondary: #09090b;
+  --surface-tertiary: #18181b;
+  --surface-card: #111113;
+  --surface-elevated: #18181b;
+
+  --text-primary: #fafafa;
+  --text-secondary: #c0c0c8;
+  --text-tertiary: #71717a;
+  --text-placeholder: #52525b;
+
+  --border-default: #27272a;
+  --border-light: #18181b;
+  --border-hover: #3f3f46;
+
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.5);
+  --shadow-elevated: 0 10px 25px -5px rgb(0 0 0 / 0.6);
+
+  /* Dark accent — brighter for better contrast */
+  --accent-50: #1e1b4b;
+  --accent-100: #172554;
+  --accent-200: #1e40af;
+  --accent-300: #2563eb;
+  --accent-400: #3b82f6;
+  --accent-500: #60a5fa;
+  --accent-600: #93c5fd;
+  --accent-700: #bfdbfe;
+  --accent-800: #dbeafe;
+  --accent-900: #eff6ff;
+  --accent-950: #fafafa;
+}
+
+/* Utility classes for dynamic accent */
+@utility bg-accent { background-color: var(--accent-500); }
+@utility bg-accent-light { background-color: var(--accent-50); }
+@utility text-accent { color: var(--accent-500); }
+@utility text-accent-dark { color: var(--accent-700); }
+@utility border-accent { border-color: var(--accent-300); }
+@utility ring-accent { --tw-ring-color: var(--accent-400); }
+@utility from-accent { --tw-gradient-from: var(--accent-500); }
+@utility to-accent-dark { --tw-gradient-to: var(--accent-600); }
+
+/* ─── Body ────────────────────────────────────── */
+body {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  @apply antialiased;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ─── Custom selection ───────────────────────── */
+::selection {
+  background-color: color-mix(in srgb, var(--accent-300) 50%, transparent);
+  color: var(--accent-900);
+}
+
+/* ─── Scrollbar ───────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent-300) 25%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent-300) 50%, transparent);
+}
+
+/* ─── Smooth transitions ──────────────────────── */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ─── Tailwind class overrides for dark mode ──── */
+/* Make all common utility classes use CSS variables instead of hardcoded Tailwind values */
+.bg-white { background-color: var(--surface-card); }
+.bg-gray-50 { background-color: var(--surface-secondary); }
+.bg-gray-100 { background-color: var(--surface-tertiary); }
+.text-gray-900 { color: var(--text-primary); }
+.text-gray-800 { color: var(--text-primary); }
+.text-gray-700 { color: var(--text-secondary); }
+.text-gray-600 { color: var(--text-secondary); }
+.text-gray-500 { color: var(--text-tertiary); }
+.text-gray-400 { color: var(--text-placeholder); }
+.border-gray-200 { border-color: var(--border-default); }
+.border-gray-100 { border-color: var(--border-light); }
+.hover\:bg-gray-100:hover { background-color: var(--surface-tertiary); }
+.hover\:bg-gray-50:hover { background-color: var(--surface-tertiary); }
+.shadow-sm, .shadow { box-shadow: var(--shadow-card); }
+
+/* Specific dark refinements */
+.dark img { opacity: 0.9; }
+
+/* ─── Animations ──────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.3s ease-in-out; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.3s ease-out; }
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in { animation: scale-in 0.2s ease-out; }
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+
+.backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.perspective-1000 { perspective: 1000px; }
+
+/* ─── Thin scrollbar utility ──────────────────── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent-300) 25%, transparent) transparent;
+}

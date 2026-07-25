@@ -1,0 +1,46 @@
+# ─── Node / Dependencies ───
+node_modules/
+.pnp/
+.pnp.js
+
+# ─── Build output ───
+dist/
+build/
+*.tsbuildinfo
+
+# ─── Environment ───
+.env
+.env.local
+.env.*.local
+
+# ─── IDE / Editor ───
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ─── Logs ───
+logs/
+*.log
+npm-debug.log*
+
+# ─── Coverage ───
+coverage/
+.nyc_output/
+
+# ─── OS files ───
+.DS_Store
+Thumbs.db
+
+# ─── Claude worktrees ───
+.claude/worktrees/
+
+# ─── Capacitor / Native ───
+android/
+ios/
+*.apk
+*.aab

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocab Master — Học từ vựng tiếng Anh</title>
+  <style>
+    :root {
+      --surface: #ffffff;
+      --surface-secondary: #f9fafb;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-tertiary: #6b7280;
+      --accent: #6366f1;
+      --accent-50: #eef2ff;
+      --border: #e5e7eb;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--surface-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    header h1 span { background: var(--accent-50); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600; }
+    header p { color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.125rem; }
+
+    /* Sections */
+    section { margin: 3rem 0; }
+    h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    h3 { font-size: 1.125rem; font-weight: 600; margin: 1.5rem 0 0.75rem; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+
+    /* Lists */
+    ul, ol { padding-left: 1.5rem; margin: 0.75rem 0; }
+    li { margin-bottom: 0.375rem; color: var(--text-secondary); }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin: 0.125rem;
+    }
+    .tag-tech { background: #eef2ff; color: #4f46e5; }
+    .tag-feat { background: #f0fdf4; color: #16a34a; }
+    .tag-mid  { background: #fffbeb; color: #d97706; }
+    .tag-mode { background: #fdf2f8; color: #db2777; }
+
+    /* Steps */
+    .step { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .step:last-child { border: none; }
+    .step-num {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+    .step-content { flex: 1; }
+    .step-title { font-weight: 600; margin-bottom: 0.25rem; }
+
+    /* Diagrams */
+    .diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      line-height: 1.8;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    .diagram .arrow { color: var(--accent); }
+    .diagram .highlight { color: var(--accent); font-weight: 600; }
+
+    /* Badge */
+    .badge { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+    .badge-green { background: #f0fdf4; color: #16a34a; }
+    .badge-red { background: #fef2f2; color: #dc2626; }
+    .badge-blue { background: #eff6ff; color: #2563eb; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    footer { text-align: center; color: var(--text-tertiary); padding: 2rem 0; font-size: 0.875rem; }
+
+    @media (max-width: 640px) {
+      .container { padding: 1rem; }
+      header h1 { font-size: 1.5rem; flex-wrap: wrap; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>
+        📚 Vocab Master
+        <span>v1.0</span>
+      </h1>
+      <p>Ứng dụng học từ vựng tiếng Anh thích ứng — 7 chế độ, thuật toán SRS tùy chỉnh, dashboard thông minh</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ─── Overview ─── -->
+    <section>
+      <h2>🚀 Tổng quan</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚛️</div>
+          <h3>React + TypeScript</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Vite 6, Framer Motion 11, Zustand 5</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
+          <h3>10 Theme Presets</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Zinc, Emerald, Cyberpunk, Dracula,...</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+          <h3>SRS Custom</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Forgetting curve + priority-based wheel</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">💾</div>
+          <h3>Offline-first</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">IndexedDB — không cần server</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Tech Stack ─── -->
+    <section>
+      <h2>🛠️ Công nghệ</h2>
+      <div class="card">
+        <div style="margin-bottom: 1rem;">
+          <span class="tag tag-tech">Vite 6</span>
+          <span class="tag tag-tech">React 19</span>
+          <span class="tag tag-tech">TypeScript 5.7</span>
+          <span class="tag tag-tech">Tailwind CSS 4</span>
+          <span class="tag tag-tech">Framer Motion 11</span>
+          <span class="tag tag-tech">Dexie.js 4</span>
+          <span class="tag tag-tech">Zustand 5</span>
+          <span class="tag tag-tech">Recharts</span>
+          <span class="tag tag-tech">Lucide React</span>
+          <span class="tag tag-tech">React Router 7</span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.875rem;">Routing · State · Database · Animation · Charts · Icons</p>
+      </div>
+    </section>
+
+    <!-- ─── Features ─── -->
+    <section>
+      <h2>⭐ Tính năng chính</h2>
+      <div class="card-grid">
+        <div class="card"><h3>📖 7 Mode Học</h3>
+          <span class="tag tag-mode">Flashcard</span>
+          <span class="tag tag-mode">Audio</span>
+          <span class="tag tag-mode">Text</span>
+          <span class="tag tag-mode">Typing</span>
+          <span class="tag tag-mode">Fill-blank</span>
+          <span class="tag tag-mode">Matching</span>
+          <span class="tag tag-mode">Synonym</span>
+        </div>
+        <div class="card"><h3>🧠 SRS Thích Ứng</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Đúng nhanh → giảm, sai nhanh → tăng, interleave 3:1</p></div>
+        <div class="card"><h3>🎨 Theme System</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">10 presets, light/dark, accent color picker</p></div>
+        <div class="card"><h3>📊 Dashboard</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Progress, streak, accuracy, weekly calendar</p></div>
+        <div class="card"><h3>🖼️ Image Support</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Unsplash fetch + upload, GIF avatar</p></div>
+        <div class="card"><h3>📝 Import</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">CSV, JSON, manual + sample file</p></div>
+        <div class="card"><h3>🎮 Games</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Matching, Synonym, Wind garden</p></div>
+        <div class="card"><h3>🧸 Mascot</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Draggable, custom image, celebration on correct</p></div>
+      </div>
+    </section>
+
+    <!-- ─── Learning Flow ─── -->
+    <section>
+      <h2>🔄 Luồng học</h2>
+
+      <div class="diagram">
+        <span class="highlight">LIST</span> <span class="arrow">→</span>
+        <span class="highlight">FLASHCARD</span> <span class="arrow">→</span>
+        <span class="highlight">MODE LOOP</span> <span class="arrow">→</span>
+        <span class="highlight">REVIEW POOL</span>
+      </div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">List tổng quan</div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Xem grid tất cả từ. Click "Bắt đầu học ngay"</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Flashcard tự đánh giá</div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Từng từ → lật thẻ → "Đã nhớ" / "Chưa nhớ". <span class="badge badge-blue">Bắt buộc qua test</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Vòng xáo trộn ngẫu nhiên</div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Engine chọn ngẫu nhiên 1 trong 7 modes + từ theo priority SRS</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Interleaving</div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Sau 3 câu, inject từ mới để pha loãng trí nhớ ngắn hạn</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Mastery → Review Pool</div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Đúng liên tiếp 3 lần → tạm vững, chuyển sang lịch ôn dài hạn</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SRS Algorithm ─── -->
+    <section>
+      <h2>🧮 Thuật toán SRS</h2>
+      <div class="card">
+        <div class="diagram" style="margin: 0 0 1rem 0;">
+          <span class="highlight">Priority</span> = wrongCount × 100 + (100 - accuracy%) + random(20)
+        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+          <tr style="border-bottom: 1px solid var(--border);">
+            <th style="text-align: left; padding: 0.5rem;">Kết quả</th>
+            <th style="text-align: left; padding: 0.5rem;">Tốc độ</th>
+            <th style="text-align: left; padding: 0.5rem;">Priority Δ</th>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;"><span class="badge badge-green">✅ Đúng</span></td>
+            <td style="padding: 0.5rem;">Nhanh (&lt;3s)</td>
+            <td style="padding: 0.5rem;">-30</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;"><span class="badge badge-green">✅ Đúng</span></td>
+            <td style="padding: 0.5rem;">Thường</td>
+            <td style="padding: 0.5rem;">-10</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;"><span class="badge badge-green">✅ Đúng</span></td>
+            <td style="padding: 0.5rem;">Chậm (&gt;8s)</td>
+            <td style="padding: 0.5rem;">+10</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;"><span class="badge badge-red">❌ Sai</span></td>
+            <td style="padding: 0.5rem;">Nhanh</td>
+            <td style="padding: 0.5rem;">+50</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;"><span class="badge badge-red">❌ Sai</span></td>
+            <td style="padding: 0.5rem;">Chậm</td>
+            <td style="padding: 0.5rem;">+30</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem;"><span class="badge badge-red">❌ Gần đúng</span></td>
+            <td style="padding: 0.5rem;">—</td>
+            <td style="padding: 0.5rem;">+15</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── Three Queues ─── -->
+    <section>
+      <h2>📦 Three Queues</h2>
+      <div class="diagram">
+<span class="highlight">newWords</span> (chưa học)
+    │
+    │  (interleave: mỗi 3 câu → inject 1 word)
+    ▼
+<span class="highlight">learningWords</span> (active rotation, priority-based)
+    │
+    │  (correctStreak ≥ 3 → mastered)
+    ▼
+<span class="highlight">reviewWords</span> (tạm vững, không active)
+      </div>
+    </section>
+
+    <!-- ─── Mode Selection ─── -->
+    <section>
+      <h2>🎲 Mode Selection</h2>
+      <div class="card">
+        <p style="margin-bottom: 0.75rem;">Mỗi lần từ xuất hiện, engine chọn mode với bias:</p>
+        <ul>
+          <li>Lần đầu gặp → <strong>flashcard</strong></li>
+          <li>Mode chưa thử → <strong>ưu tiên cao</strong></li>
+          <li><code>audio_challenge</code> + <code>typing_challenge</code> → bắt buộc thử ít nhất 1 lần</li>
+          <li>Mode từng sai → weight <strong>0.3</strong></li>
+          <li>Mode vừa làm → weight <strong>0.2</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ─── Project Structure ─── -->
+    <section>
+      <h2>📁 Cấu trúc project</h2>
+      <div class="diagram" style="font-size: 0.8rem;">
+src/
+├── algorithms/        # Engine, SRS, forgetting-curve
+├── components/        # UI + layout + effects
+│   ├── layout/        # AppShell, Sidebar
+│   ├── mascot/        # Draggable mascot
+│   ├── effects/       # Celebration, particles
+│   └── ui/            # Card, Button, Badge
+├── data/              # Theme presets
+├── db/                # IndexedDB (Dexie)
+├── features/          # 7 modes + games
+├── hooks/             # useAudio, useLearningSession
+├── lib/               # Audio, distractor, image-search
+├── pages/             # All routes
+├── stores/            # Zustand stores
+└── types/             # TS interfaces
+      </div>
+    </section>
+
+    <!-- ─── Routes ─── -->
+    <section>
+      <h2>🧭 Routes</h2>
+      <div class="card" style="font-family: monospace; font-size: 0.875rem;">
+        <div><span class="badge badge-blue">/</span> — Dashboard</div>
+        <div><span class="badge badge-blue">/learn</span> — Learning session</div>
+        <div><span class="badge badge-blue">/review</span> — Review due words</div>
+        <div><span class="badge badge-blue">/words</span> — Word list + browser</div>
+        <div><span class="badge badge-blue">/words/:id</span> — Word detail + edit</div>
+        <div><span class="badge badge-blue">/import</span> — Import CSV/JSON</div>
+        <div><span class="badge badge-blue">/stats</span> — Statistics</div>
+        <div><span class="badge badge-blue">/settings</span> — Settings</div>
+        <div><span class="badge badge-blue">/games/matching</span> — Matching game</div>
+        <div><span class="badge badge-blue">/wind</span> — Wind garden</div>
+      </div>
+    </section>
+
+    <!-- ─── Themes ─── -->
+    <section>
+      <h2>🎨 Theme Presets</h2>
+      <div class="card-grid">
+        <div class="card" style="border-left: 4px solid #a1a1aa;"><h3>⚪ Zinc</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Default, trung tính</p></div>
+        <div class="card" style="border-left: 4px solid #10b981;"><h3>🌿 Emerald</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Xanh lá</p></div>
+        <div class="card" style="border-left: 4px solid #d97706;"><h3>📻 Retro</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Vintage nâu</p></div>
+        <div class="card" style="border-left: 4px solid #a855f7;"><h3>⚡ Cyberpunk</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Tím neon</p></div>
+        <div class="card" style="border-left: 4px solid #22c55e;"><h3>🌲 Forest</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Rừng xanh</p></div>
+        <div class="card" style="border-left: 4px solid #f59e0b;"><h3>✨ Luxury</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Vàng đen</p></div>
+        <div class="card" style="border-left: 4px solid #0ea5e9;"><h3>🌊 Ocean</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Xanh dương</p></div>
+        <div class="card" style="border-left: 4px solid #c084fc;"><h3>🧛 Dracula</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Dark purple</p></div>
+        <div class="card" style="border-left: 4px solid #81a1c1;"><h3>❄️ Nord</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Xanh nordic</p></div>
+        <div class="card" style="border-left: 4px solid #f97316;"><h3>🌅 Sunset</h3><p style="color: var(--text-secondary); font-size: 0.875rem;">Hoàng hôn</p></div>
+      </div>
+    </section>
+
+    <!-- ─── Deploy ─── -->
+    <section>
+      <h2>☁️ Deploy</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🐙</div>
+          <h3>GitHub Pages</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">Workflow Actions auto deploy</p>
+          <a href="https://github.com/vuongdat67/VocabMaster" style="color: var(--accent); font-size: 0.875rem;">github.com/vuongdat67/VocabMaster</a>
+        </div>
+        <div class="card">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">☁️</div>
+          <h3>Cloudflare Pages</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">CDN global, SPA auto routing</p>
+          <a href="https://dash.cloudflare.com" style="color: var(--accent); font-size: 0.875rem;">dash.cloudflare.com → Pages</a>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <h2>📄 License</h2>
+      <p style="color: var(--text-secondary);">MIT — build by <a href="https://github.com/vuongdat67" style="color: var(--accent;">@vuongdat67</a> with Claude Code</p>
+    </section>
+
+  </main>
+
+  <footer>
+    Vocab Master © 2026
+  </footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# ─── Auto-detect text files ───
+* text=auto
+
+# ─── Source code ───
+*.ts    text diff=typescript
+*.tsx   text diff=typescript
+*.js    text
+*.jsx   text
+*.json  text
+*.css   text
+*.html  text
+
+# ─── Images (binary) ───
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.svg   text
+
+# ─── Fonts ───
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+
+# ─── Audio ───
+*.mp3   binary
+*.wav   binary
+*.ogg   binary
+
+# ─── Archives ───
+*.zip   binary
+*.tar.gz binary
+
+# ─── Documents ───
+*.md    text diff=markdown
+*.csv   text
+*.env.example text
