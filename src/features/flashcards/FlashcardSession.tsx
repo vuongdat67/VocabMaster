@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Volume2, Check, X } from 'lucide-react'
+import { Volume2, Check, X, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Word } from '@/types/word'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -14,16 +14,33 @@ interface Props {
 export function FlashcardSession({ word, onComplete }: Props) {
   const [flipped, setFlipped] = useState(false)
   const [answered, setAnswered] = useState(false)
+  const [timer, setTimer] = useState(0)
   const startTime = useRef(Date.now())
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const { speak } = useAudio()
 
   useEffect(() => {
     startTime.current = Date.now()
     setFlipped(false)
     setAnswered(false)
-    const timer = setTimeout(() => speak(word.word), 300)
-    return () => clearTimeout(timer)
+    setTimer(0)
+    const t = setTimeout(() => speak(word.word), 300)
+    return () => clearTimeout(t)
   }, [word.word, speak])
+
+  // Timer
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setTimer(Math.floor((Date.now() - startTime.current) / 1000))
+    }, 1000)
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [word.word])
+
+  const handleFlip = () => {
+    if (!answered) setFlipped((f) => !f)
+  }
 
   const handleAnswer = (correct: boolean) => {
     if (answered) return
@@ -32,20 +49,42 @@ export function FlashcardSession({ word, onComplete }: Props) {
     setTimeout(() => onComplete(correct, time), 400)
   }
 
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60)
+    const sec = s % 60
+    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`
+  }
+
   return (
     <div className="max-w-lg mx-auto">
+      {/* Timer + word counter */}
+      <div className="flex items-center justify-between mb-4 px-1">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+          <span className="font-mono tabular-nums">{formatTime(timer)}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-gray-400">Click để lật</span>
+          <RotateCcw className="w-3.5 h-3.5 text-gray-400" />
+        </div>
+      </div>
+
+      {/* Flashcard */}
       <div
         className="relative cursor-pointer"
-        onClick={() => !flipped && setFlipped(true)}
+        onClick={handleFlip}
         style={{ perspective: '1000px' }}
       >
         <motion.div
           className="relative w-full min-h-[280px]"
           animate={{ rotateY: flipped ? 180 : 0 }}
-          transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+          transition={{ duration: 0.5, type: 'spring', stiffness: 90 }}
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Front */}
+          {/* Front — English word */}
           <div
             className="absolute inset-0"
             style={{ backfaceVisibility: 'hidden' as const }}
@@ -76,7 +115,7 @@ export function FlashcardSession({ word, onComplete }: Props) {
             </Card>
           </div>
 
-          {/* Back */}
+          {/* Back — Vietnamese meaning */}
           <div
             className="absolute inset-0"
             style={{ backfaceVisibility: 'hidden' as const, transform: 'rotateY(180deg)' }}
@@ -84,7 +123,7 @@ export function FlashcardSession({ word, onComplete }: Props) {
             <Card className="p-6 flex flex-col items-center justify-center min-h-[280px]"
               style={{ borderColor: 'color-mix(in srgb, var(--accent-500) 30%, var(--border-default))' }}
             >
-              <div className="text-center mb-5">
+              <div className="text-center mb-5 w-full">
                 {word.definitions.map((def, i) => (
                   <div key={i} className="mb-2">
                     <p className="text-lg text-gray-900 font-medium">{def.vietnamese}</p>
@@ -100,11 +139,21 @@ export function FlashcardSession({ word, onComplete }: Props) {
                   </div>
                 )}
               </div>
+
+              {/* Flip back hint */}
+              {!answered && (
+                <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Chạm để quay lại</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </div>
+              )}
             </Card>
           </div>
         </motion.div>
       </div>
 
+      {/* Answer buttons — only when flipped AND not answered */}
       {flipped && !answered && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -127,6 +176,17 @@ export function FlashcardSession({ word, onComplete }: Props) {
           >
             Đã nhớ
           </Button>
+        </motion.div>
+      )}
+
+      {/* After answered: show result with word info */}
+      {answered && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center mt-4 text-sm text-gray-500"
+        >
+          Đã trả lời — chờ chuyển tiếp...
         </motion.div>
       )}
     </div>

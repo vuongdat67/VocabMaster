@@ -101,6 +101,19 @@ export function LearningSessionPage() {
     await session.endSession()
   }, [session])
 
+  // Enter key → trigger continue
+  useEffect(() => {
+    if (!waitingContinue) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        handleContinue()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [waitingContinue, handleContinue])
+
   // ── Setup screen: choose pack ──
   if (!session.isSessionActive && !session.isSessionComplete) {
     return (

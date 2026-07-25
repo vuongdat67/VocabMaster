@@ -46,8 +46,17 @@ export function SynonymMatchSession({ word, onComplete }: Props) {
 
     async function load() {
       const all = await wordRepo.getAll()
-      const others = all.filter((w) => w.id !== word.id && w.word !== word.word)
-      const shuffledOthers = shuffle(others)
+
+      // Build a pool of relevant distractor words:
+      // 1st priority — words sharing tags with the current word (same study pack)
+      // 2nd priority — same difficulty level
+      // NEVER random words from other contexts
+      const sameTag = shuffle(
+        all.filter((w) => w.id !== word.id && w.tags.some((t) => word.tags.includes(t)))
+      )
+      const sameDifficulty = shuffle(
+        all.filter((w) => w.id !== word.id && w.difficulty === word.difficulty)
+      )
 
       const synPairs: SynonymPair[] = []
 
@@ -62,7 +71,7 @@ export function SynonymMatchSession({ word, onComplete }: Props) {
       }
 
       // 2. Definition-based pair
-      if (word.definitions[0] && !pairs.some((p) => p.word1 === word.word)) {
+      if (word.definitions[0] && !synPairs.some((p) => p.word1 === word.word)) {
         const defShort = word.definitions[0].vietnamese.slice(0, 30)
         synPairs.push({
           id: `def-${word.id}`,
@@ -71,9 +80,10 @@ export function SynonymMatchSession({ word, onComplete }: Props) {
         })
       }
 
-      // 3. Distractors from other words
+      // 3. Distractors — only from relevant word pool (tags first, difficulty fallback)
       const usedWords = new Set([word.word, ...synonymWords.map((w) => w.word)])
-      for (const other of shuffledOthers) {
+      const pool = sameTag.length >= 4 ? sameTag : sameDifficulty
+      for (const other of pool) {
         if (usedWords.has(other.word)) continue
         if (synPairs.length >= 6) break
         usedWords.add(other.word)

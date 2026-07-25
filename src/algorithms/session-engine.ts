@@ -134,6 +134,14 @@ function createLearningWord(word: Word): LearningWord {
 function selectMode(lw: LearningWord): LearningMode {
   if (lw.totalResponses === 0) return 'flashcard'
 
+  // If the word was wrong, cycle to the next mode for remediation
+  const modeCycle: LearningMode[] = ['flashcard', 'typing_challenge', 'audio_challenge', 'fill_blank', 'matching', 'text_challenge', 'synonym_match']
+  if (lw.lastMode && lw.wrongModes.includes(lw.lastMode)) {
+    const currentIdx = modeCycle.indexOf(lw.lastMode)
+    const nextMode = currentIdx >= 0 ? modeCycle[(currentIdx + 1) % modeCycle.length]! : 'flashcard'
+    return nextMode
+  }
+
   const untried = ALL_MODES.filter((m) => !lw.attemptedModes.includes(m))
 
   if (untried.length > 0) {
@@ -261,6 +269,15 @@ export function processAnswer(
     lw.timesWrong++
     lw.correctStreak = 0
     if (wasCloseCall) lw.closeCalls++
+
+    // Force cycle to next mode so the word is retested in a different format
+    const modeCycle: LearningMode[] = ['flashcard', 'typing_challenge', 'audio_challenge', 'fill_blank', 'matching', 'text_challenge', 'synonym_match']
+    const currentIdx = lw.lastMode ? modeCycle.indexOf(lw.lastMode) : -1
+    const nextMode = modeCycle[(currentIdx + 1) % modeCycle.length]!
+    lw.lastMode = nextMode
+    if (!lw.attemptedModes.includes(nextMode)) {
+      lw.attemptedModes = [...lw.attemptedModes, nextMode]
+    }
   }
 
   lw.averageResponseTime = lw.averageResponseTime
