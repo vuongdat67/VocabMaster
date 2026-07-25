@@ -18,7 +18,7 @@ export function ThemeSwitcher({ sidebarOpen }: { sidebarOpen: boolean }) {
       </div>
       <div 
         tabIndex={0} 
-        className="dropdown-content z-50 py-3 shadow-xl bg-white rounded-box w-full mb-2 border border-gray-200 cursor-default flex flex-col overflow-hidden"
+        className="dropdown-content z-50 py-3 shadow-xl bg-white rounded-box w-full mb-2 border border-gray-200 cursor-default overflow-hidden"
       >
         <div className="flex gap-2 mb-2 pb-3 px-3 border-b border-gray-100 shrink-0">
           <button
