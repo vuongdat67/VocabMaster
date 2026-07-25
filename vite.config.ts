@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/VocabMaster/',
+  base: process.env.CF_PAGES ? './' : '/VocabMaster/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
