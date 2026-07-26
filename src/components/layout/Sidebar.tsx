@@ -2,10 +2,12 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
-  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search, Mic
+  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search, Mic,
+  User, LogIn
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
+import { useAuthStore } from '@/stores/auth-store'
 import { ThemeSwitcher } from '@/components/ui/ThemeSwitcher'
 
 const mainLinks = [
@@ -72,51 +74,60 @@ export function Sidebar() {
           </button>
         </div>
 
-        {/* ── Nav links ── */}
-        <nav className="flex-1 py-3 space-y-0.5 px-2 overflow-y-auto scrollbar-thin">
-          {sidebarOpen && (
-            <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
-              Học tập
-            </p>
-          )}
-          {mainLinks.map(({ to, icon: Icon, label }) => (
-            <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
-          ))}
+        {/* ── Scrollable Body ── */}
+        <div className="flex-1 overflow-y-auto scrollbar-thin flex flex-col">
+          <nav className="py-3 space-y-0.5 px-2">
+            {sidebarOpen && (
+              <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+                Học tập
+              </p>
+            )}
+            {mainLinks.map(({ to, icon: Icon, label }) => (
+              <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
+            ))}
 
-          {sidebarOpen && (
-            <p className="px-2 pt-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
-              Giải trí
-            </p>
-          )}
-          {gameLinks.map(({ to, icon: Icon, label }) => (
-            <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
-          ))}
+            {sidebarOpen && (
+              <p className="px-2 pt-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+                Giải trí
+              </p>
+            )}
+            {gameLinks.map(({ to, icon: Icon, label }) => (
+              <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
+            ))}
 
-          <div className="my-2 border-t border-gray-100" />
+            <div className="my-2 border-t border-gray-100" />
 
-          {bottomLinks.map(({ to, icon: Icon, label }) => (
-            <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
-          ))}
-        </nav>
+            {bottomLinks.map(({ to, icon: Icon, label }) => (
+              <NavItem key={to} to={to} icon={Icon} label={label} sidebarOpen={sidebarOpen} />
+            ))}
+          </nav>
 
-        {/* ── Footer ── */}
-        <div className="px-2 py-3 border-t border-gray-100 flex flex-col gap-1 overflow-visible">
-          <ThemeSwitcher sidebarOpen={sidebarOpen} />
-          
-          <button
-            onClick={() => updateSettings({ bgmEnabled: !bgmEnabled })}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 text-gray-500 hover:text-gray-700 hover:bg-gray-50 w-full"
-            title="Bật/tắt nhạc nền"
-          >
-            {bgmEnabled ? <Music className="w-[18px] h-[18px] shrink-0" /> : <VolumeX className="w-[18px] h-[18px] shrink-0" />}
-            {sidebarOpen && <span className="text-sm font-medium whitespace-nowrap">Nhạc nền</span>}
-          </button>
+          {/* ── Footer ── */}
+          <div className="mt-auto px-2 py-3 border-t border-gray-100 flex flex-col gap-1">
+            <ThemeSwitcher sidebarOpen={sidebarOpen} />
+            
+            <button
+              onClick={() => updateSettings({ bgmEnabled: !bgmEnabled })}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 text-gray-500 hover:text-gray-700 hover:bg-gray-50 w-full"
+              title="Bật/tắt nhạc nền"
+            >
+              {bgmEnabled ? <Music className="w-[18px] h-[18px] shrink-0" /> : <VolumeX className="w-[18px] h-[18px] shrink-0" />}
+              {sidebarOpen && <span className="text-sm font-medium whitespace-nowrap">Nhạc nền</span>}
+            </button>
 
-          {sidebarOpen && (
-            <div className="px-2 mt-2">
-              <p className="text-[11px] text-gray-400">VocabMaster &middot; v0.1</p>
-            </div>
-          )}
+            <NavItem 
+              to="/auth" 
+              icon={useAuthStore(state => state.user) ? User : LogIn} 
+              label={useAuthStore(state => state.user) ? 'Tài khoản' : 'Đăng nhập'} 
+              sidebarOpen={sidebarOpen} 
+            />
+
+            {sidebarOpen && (
+              <div className="px-2 mt-4 pb-2 text-center">
+                <p className="text-[11px] font-medium text-gray-400 tracking-wider">VOCABMASTER &middot; V0.1</p>
+              </div>
+            )}
+          </div>
         </div>
       </motion.aside>
     </AnimatePresence>

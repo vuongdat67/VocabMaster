@@ -9,10 +9,16 @@ import { ReviewReminder } from '@/components/effects/ReviewReminder'
 import { startWindAmbient, stopWindAmbient } from '@/lib/sound-manager'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
+import { useAuthStore } from '@/stores/auth-store'
 
 export function AppShell() {
  const { setMobile } = useUIStore()
  const { settings } = useSettingsStore()
+ const initializeAuth = useAuthStore(state => state.initialize)
+
+ useEffect(() => {
+   initializeAuth()
+ }, [initializeAuth])
 
  useEffect(() => {
  const checkMobile = () => setMobile(window.innerWidth < 768)

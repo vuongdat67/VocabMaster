@@ -2,10 +2,12 @@ import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { useSettingsStore } from '@/stores/settings-store'
-import { Volume2, Eye, Brain, Palette, Upload, Sun, Moon, Monitor, Layout } from 'lucide-react'
-import { useRef } from 'react'
+import { Volume2, Eye, Brain, Palette, Upload, Sun, Moon, Monitor, Layout, Cloud } from 'lucide-react'
+import { useRef, useState } from 'react'
 import type { ThemeColor, ThemeMode } from '@/types/settings'
 import { THEME_PRESETS } from '@/data/themes'
+import { useAuthStore } from '@/stores/auth-store'
+import { syncEngine } from '@/lib/sync-engine'
 
 const THEMES: { key: ThemeColor; label: string; color: string }[] = [
   { key: 'indigo', label: 'Tím', color: '#6366f1' },
@@ -27,9 +29,61 @@ export function SettingsPage() {
     }
   }
 
+  const { user, signOut } = useAuthStore()
+  const [syncing, setSyncing] = useState(false)
+
+  const handleSync = async () => {
+    if (!user) return
+    setSyncing(true)
+    try {
+      await syncEngine.sync()
+      alert('Đồng bộ thành công!')
+    } catch (err: any) {
+      alert('Lỗi đồng bộ: ' + err.message)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Cài đặt</h2>
+
+      {/* Account & Sync */}
+      <Card className="p-6 space-y-4">
+        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+          <Cloud className="w-4 h-4" style={{ color: 'var(--accent-500)' }} /> Tài khoản & Đồng bộ
+        </h3>
+        {user ? (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">{user.email}</p>
+                <p className="text-xs text-gray-500">Đã đăng nhập</p>
+              </div>
+              <Button variant="ghost" onClick={signOut}>Đăng xuất</Button>
+            </div>
+            <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+              <span className="text-sm text-gray-600">Đồng bộ đám mây</span>
+              <Button 
+                variant="primary" 
+                onClick={handleSync}
+                isLoading={syncing}
+                disabled={syncing}
+              >
+                Đồng bộ ngay
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-4 space-y-3">
+            <p className="text-sm text-gray-500">Đăng nhập để đồng bộ dữ liệu giữa các thiết bị</p>
+            <Button onClick={() => window.location.hash = '#/auth'}>
+              Đăng nhập / Đăng ký
+            </Button>
+          </div>
+        )}
+      </Card>
 
       {/* Display */}
       <Card className="p-6 space-y-4">

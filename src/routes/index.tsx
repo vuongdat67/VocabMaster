@@ -21,11 +21,12 @@ const SwipeFlashcardPage = lazy(() => import('@/pages/SwipeFlashcardPage').then(
 const ContextGamePage = lazy(() => import('@/pages/ContextGamePage').then(m => ({ default: m.ContextGamePage })))
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage').then(m => ({ default: m.DictionaryPage })))
 const SpeechGamePage = lazy(() => import('@/pages/SpeechGamePage').then(m => ({ default: m.SpeechGamePage })))
+const AuthPage = lazy(() => import('@/pages/AuthPage').then(m => ({ default: m.AuthPage })))
 
 function LoadingFallback() {
   return (
     <div className="flex items-center justify-center h-64">
-      <div className="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full" />
+      <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
     </div>
   )
 }
@@ -41,6 +42,7 @@ export const router = createHashRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <Suspense fallback={<LoadingFallback />}><HomePage /></Suspense> },
+      { path: 'auth', element: <Suspense fallback={<LoadingFallback />}><AuthPage /></Suspense> },
       { path: 'learn', element: <Suspense fallback={<LoadingFallback />}><LearningSessionPage /></Suspense> },
       { path: 'words', element: <Suspense fallback={<LoadingFallback />}><WordListPage /></Suspense> },
       { path: 'words/:id', element: <Suspense fallback={<LoadingFallback />}><WordDetailPage /></Suspense> },
