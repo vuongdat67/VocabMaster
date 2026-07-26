@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
-  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3
+  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -10,6 +10,7 @@ import { ThemeSwitcher } from '@/components/ui/ThemeSwitcher'
 
 const mainLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/dictionary', icon: Search, label: 'Tra từ' },
   { to: '/learn', icon: GraduationCap, label: 'Học tập' },
   { to: '/review', icon: Repeat, label: 'Ôn tập' },
   { to: '/words', icon: BookOpen, label: 'Từ vựng' },

@@ -1,0 +1,1231 @@
+[
+  {
+    "id": "9ce91f10-7255-4d2f-b4c0-c489bc6f8ce6",
+    "word": "abandon",
+    "ipa": "/əˈbæn.dən/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To give up or relinquish control of, to surrender or to give oneself over, or to yield to one's emotions.",
+        "vietnamese": "[Cần dịch] To give up..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "1f51769f-f85c-41ee-a91a-a05dcf6d016f",
+    "word": "absolute",
+    "ipa": "/ˈæb.səˌljuːt/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "That which is independent of context-dependent interpretation, inviolate, fundamental.",
+        "vietnamese": "[Cần dịch] That which is..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "moral absolutes",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "82d87c5b-a878-49b2-9ec9-dfdadf150219",
+    "word": "abstract",
+    "ipa": "/ˈæbˌstɹækt/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An abridgement or summary of a longer publication.",
+        "vietnamese": "[Cần dịch] An abridgement or..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "abridgment",
+      "compendium",
+      "epitome"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "ae9d1689-2f37-4c99-a350-6270cdf3fd74",
+    "word": "academic",
+    "ipa": "/ˌækəˈdɛmɪk/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "(usually capitalized) A follower of Plato, a Platonist.",
+        "vietnamese": "[Cần dịch] (usually capitalized) A..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "8f09f2ad-8a21-48c7-842a-20af6d7178f1",
+    "word": "acceptable",
+    "ipa": "/æk.ˈsɛp.tə.bəl/",
+    "partOfSpeech": "adjective",
+    "definitions": [
+      {
+        "meaning": "Worthy, decent, sure of being accepted or received with at least moderate pleasure",
+        "vietnamese": "[Cần dịch] Worthy, decent, sure..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "We need to find an acceptable present for Jeff.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "f0516b37-c6a6-430e-90c9-a7d0b07edcf6",
+    "word": "accidental",
+    "ipa": "/ˌæk.sɪ.ˈdɛn.tl̩/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A property which is not essential; a nonessential; anything happening accidentally.",
+        "vietnamese": "[Cần dịch] A property which..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "86ceeeaa-b4a7-4ab5-ae0b-0c7468cc0183",
+    "word": "accompany",
+    "ipa": "/ə.ˈkʌm.pə.ni/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To go with or attend as a companion or associate; to keep company with; to go along with.",
+        "vietnamese": "[Cần dịch] To go with..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "Geoffrey accompanied the group on their pilgrimage.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "416eeda1-c569-4c4a-9420-f4f26ad2e75a",
+    "word": "accomplish",
+    "ipa": "/əˈkɐm.plɪʃ/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To finish successfully.",
+        "vietnamese": "[Cần dịch] To finish successfully...."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "achieve",
+      "carry out",
+      "complete"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "c2dd3b25-30c9-4b1d-a552-0bfb7e65b935",
+    "word": "accurate",
+    "ipa": "/ˈæk.jə.ɹɪt/",
+    "partOfSpeech": "adjective",
+    "definitions": [
+      {
+        "meaning": "Telling the truth or giving a true result; exact; not defective or faulty",
+        "vietnamese": "[Cần dịch] Telling the truth..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "accurate knowledge",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "correct",
+      "exact",
+      "just"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "593b1dbe-d302-4b55-a2b2-c3d3fcef7f9f",
+    "word": "acknowledge",
+    "ipa": "/əkˈnɒ.lɪdʒ/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To admit the knowledge of; to recognize as a fact or truth; to declare one's belief in",
+        "vietnamese": "[Cần dịch] To admit the..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "to acknowledge the being of a god",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "admit",
+      "allow",
+      "avow"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "8a16fa10-6550-40a5-a70e-57788884e238",
+    "word": "acquire",
+    "ipa": "/əˈkwaɪə/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To get.",
+        "vietnamese": "[Cần dịch] To get...."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "attain",
+      "come by",
+      "earn"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "1bbc08cd-dd06-48bc-bb96-1ae912560be2",
+    "word": "adapt",
+    "ipa": "/əˈdæpt/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To make suitable; to make to correspond; to fit or suit",
+        "vietnamese": "[Cần dịch] To make suitable;..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "proportion"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "e06ac7cb-d5c2-49ba-92ec-93fb41332660",
+    "word": "adequate",
+    "ipa": "",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To equalize; to make adequate.",
+        "vietnamese": "[Cần dịch] To equalize; to..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "63903e0d-86b8-4830-8bcb-20e50d53311e",
+    "word": "adjust",
+    "ipa": "/əˈdʒʌst/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To modify.",
+        "vietnamese": "[Cần dịch] To modify...."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "Morimoto's recipes are adjusted to suit the American palate.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "change",
+      "edit",
+      "modify"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "deb0a4e3-8358-41b7-8479-59a96f52d826",
+    "word": "administration",
+    "ipa": "/ədˌmɪnəˈstɹeɪʃən/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "The act of administering; government of public affairs; the service rendered, or duties assumed, in conducting affairs; the conducting of any office or employment; direction.",
+        "vietnamese": "[Cần dịch] The act of..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "conduct",
+      "governing",
+      "management"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "4b55f8df-fcb5-4870-b209-76442a91bb42",
+    "word": "admit",
+    "ipa": "/ədˈmɪt/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To allow to enter; to grant entrance (to), whether into a place, into the mind, or into consideration",
+        "vietnamese": "[Cần dịch] To allow to..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "A ticket admits one into a playhouse.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "inlet",
+      "let in",
+      "acknowledge"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "f825dfed-2ca4-4998-adc5-f55df453afd3",
+    "word": "advance",
+    "ipa": "/ədˈvaːns/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A forward move; improvement or progression.",
+        "vietnamese": "[Cần dịch] A forward move;..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "an advance in health or knowledge",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "95c07433-7b62-47b3-9737-d2ebecba80b3",
+    "word": "advantage",
+    "ipa": "/ədˈvɑːn.tɪdʒ/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "Any condition, circumstance, opportunity or means, particularly favorable to success, or to any desired end.",
+        "vietnamese": "[Cần dịch] Any condition, circumstance,..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "The enemy had the advantage of a more elevated position.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "benefit",
+      "edge",
+      "foredeal"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "c2f1ffde-2e75-4f2c-9d86-bf10ded8719b",
+    "word": "adventure",
+    "ipa": "/ædˈvɛnt͡ʃɚ/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "The encountering of risks; a bold undertaking, in which dangers are likely to be encountered, and the issue is staked upon unforeseen events; a daring feat.",
+        "vietnamese": "[Cần dịch] The encountering of..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "hazard",
+      "jeopardy",
+      "fortune"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "d9285e8f-8548-4d6a-bcf5-8684eb972f6c",
+    "word": "advertise",
+    "ipa": "/ˈadvə(ɹ)taɪz/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To give (especially public) notice of (something); to announce publicly.",
+        "vietnamese": "[Cần dịch] To give (especially..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "promote",
+      "publicise",
+      "sell"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "92a70ec9-b1ef-431b-86d3-7153854d1159",
+    "word": "advice",
+    "ipa": "/ədˈvaɪs/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An opinion offered in an effort to be helpful.",
+        "vietnamese": "[Cần dịch] An opinion offered..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "She was offered various piece of advice on what to do with her new-found wealth.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "admonition",
+      "counsel",
+      "exhortation"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "652b67a8-e297-433f-8918-065638437157",
+    "word": "advocate",
+    "ipa": "/ˈæd.və.keɪt/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "Someone whose job is to speak for someone's case in a court of law; a counsel.",
+        "vietnamese": "[Cần dịch] Someone whose job..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "47483ba9-a578-49f0-9330-be85754c302b",
+    "word": "affair",
+    "ipa": "/əˈfɛə/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "(often in the plural) Something which is done or is to be done; business of any kind, commercial, professional, or public.",
+        "vietnamese": "[Cần dịch] (often in the..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "a difficult affair to manage",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "concern",
+      "matter"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "e9b97816-4cdf-4e87-a760-0def2be069f2",
+    "word": "affect",
+    "ipa": "/əˈfɛkt/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To influence or alter.",
+        "vietnamese": "[Cần dịch] To influence or..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "The experience affected me deeply.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "alter",
+      "change",
+      "have an effect on"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "341b3db3-a89d-4635-b889-f2b8633d7d0d",
+    "word": "afford",
+    "ipa": "/əˈfɔːd/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To incur, stand, or bear without serious detriment, as an act which might under other circumstances be injurious;—with an auxiliary, as can, could, might, etc.; to be able or rich enough.",
+        "vietnamese": "[Cần dịch] To incur, stand,..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "I think we can afford the extra hour it will take.  We can only afford to buy a small car at the moment.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "ff1f292d-989b-4da7-a424-954bb890f27e",
+    "word": "agency",
+    "ipa": "/ˈeɪ.dʒən.si/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "The capacity, condition, or state of acting or of exerting power.",
+        "vietnamese": "[Cần dịch] The capacity, condition,..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "action",
+      "activity",
+      "operation"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "3f5cb341-7fb3-440b-a563-60a93bbb0b48",
+    "word": "aggressive",
+    "ipa": "/əˈɡɹɛs.ɪv/",
+    "partOfSpeech": "adjective",
+    "definitions": [
+      {
+        "meaning": "Characterized by aggression; unjustly attacking; prone to behave in a way that involves attacking or arguing.",
+        "vietnamese": "[Cần dịch] Characterized by aggression;..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "an aggressive policy, war, person, nation",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "548b9dea-828a-4262-b408-0a5961f75a96",
+    "word": "agreement",
+    "ipa": "/əˈɡɹiːmənt/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An understanding between entities to follow a specific course of conduct.",
+        "vietnamese": "[Cần dịch] An understanding between..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "to enter an agreement;  the UK and US negotiators nearing agreement;  he nodded his agreement.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "settlement",
+      "accord",
+      "concurrence"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "870ccddd-12c7-4524-8b23-3d470c850c69",
+    "word": "agriculture",
+    "ipa": "/ˈæɡɹɪˌkʌltʃə/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "The art or science of cultivating the ground, including the harvesting of crops, and the rearing and management of livestock",
+        "vietnamese": "[Cần dịch] The art or..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "5702252e-aa0d-45b3-942b-85da8cbc209f",
+    "word": "aircraft",
+    "ipa": "/ɛə.kɹɑːft/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A vehicle capable of atmospheric flight due to interaction with the air, such as buoyancy or lift",
+        "vietnamese": "[Cần dịch] A vehicle capable..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "8590c94a-d73e-4255-a575-9c67482f0973",
+    "word": "alien",
+    "ipa": "/ˈeɪ.li.ən/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "Any life form of extraterrestrial or extradimensional origin.",
+        "vietnamese": "[Cần dịch] Any life form..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "outlander",
+      "fremd",
+      "guest"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "025de10b-6d1c-45ce-a297-4062c9a22dea",
+    "word": "allocate",
+    "ipa": "/ˈæl.ə.keɪt/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To set aside for a purpose.",
+        "vietnamese": "[Cần dịch] To set aside..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "appropriate",
+      "earmark"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "abf76739-388b-457f-a887-9dc293661365",
+    "word": "alter",
+    "ipa": "/ˈɑl.tɚ/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To change the form or structure of.",
+        "vietnamese": "[Cần dịch] To change the..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "46402893-b27c-45a3-a335-4189e62cd733",
+    "word": "alternative",
+    "ipa": "/ɒl.ˈtɜː(ɹ).nə.tɪv/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A situation which allows a mutually exclusive choice between two or more possibilities; a choice between two or more possibilities.",
+        "vietnamese": "[Cần dịch] A situation which..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "4b4d3a49-2606-4312-9261-e6644af65346",
+    "word": "amazing",
+    "ipa": "/əˈmeɪzɪŋ/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To fill with wonder and surprise; to astonish, astound, surprise or perplex.",
+        "vietnamese": "[Cần dịch] To fill with..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "He was amazed when he found that the girl was a robot.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "3e66041a-89c1-4d99-ad27-a49ca8bc450d",
+    "word": "ambition",
+    "ipa": "/æmˈbɪ.ʃən/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "Eager or inordinate desire for some object that confers distinction, as preferment, honor, superiority, political power, or literary fame; desire to distinguish one's self from other people.",
+        "vietnamese": "[Cần dịch] Eager or inordinate..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "My son, John, wants to be a firefighter very much. He has a lot of ambition.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "00b52567-39cb-4f3d-98a8-25d910242be6",
+    "word": "analyze",
+    "ipa": "/ˈæn.ə.laɪz/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To subject to analysis.",
+        "vietnamese": "[Cần dịch] To subject to..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "df092e53-6e68-4104-aa8a-602f19532ef2",
+    "word": "ancient",
+    "ipa": "/ˈeɪn.ʃənt/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A person who is very old.",
+        "vietnamese": "[Cần dịch] A person who..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "geriatric",
+      "oldster",
+      "senior citizen"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "a8e9e744-1a9d-473d-a7e9-36314e408651",
+    "word": "anger",
+    "ipa": "/ˈæŋɡə(ɹ)/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A strong feeling of displeasure, hostility or antagonism towards someone or something, usually combined with an urge to harm.",
+        "vietnamese": "[Cần dịch] A strong feeling..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "You need to control your anger.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "b72a8c4d-5fc2-4b28-bf42-f8164d0a8466",
+    "word": "angle",
+    "ipa": "/ˈæŋ.ɡəl/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A figure formed by two rays which start from a common point (a plane angle) or by three planes that intersect (a solid angle).",
+        "vietnamese": "[Cần dịch] A figure formed..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "the angle between lines A and B",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "swerve",
+      "corner",
+      "nook"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "4445a4ac-2d44-4a68-9de9-43055c9ba169",
+    "word": "animal",
+    "ipa": "/ˈænɪməl/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "In scientific usage, a multicellular organism that is usually mobile, whose cells are not encased in a rigid cell wall (distinguishing it from plants and fungi) and which derives energy solely from the consumption of other organisms (distinguishing it from plants).",
+        "vietnamese": "[Cần dịch] In scientific usage,..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "A cat is an animal, not a plant. Humans are also animals, under the scientific definition, as we are not plants.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "beast",
+      "beast",
+      "creature"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "99333ffc-00e1-477c-9b0a-de20ad075088",
+    "word": "anniversary",
+    "ipa": "/ˌænɪˈvɜːs(ə)ɹi/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "A day that is an exact number of years (to the day) since a given significant event occurred. Often preceded by an ordinal number indicating the number of years.",
+        "vietnamese": "[Cần dịch] A day that..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "Today is the fiftieth anniversary of the end of the war.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "yearday",
+      "yeartide"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "269fb389-0c0c-4976-995d-714c0ee5560f",
+    "word": "announce",
+    "ipa": "/əˈnaʊns/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To give public notice, especially for the first time; to make known",
+        "vietnamese": "[Cần dịch] To give public..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "abjudicate",
+      "judge",
+      "declare"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "40516566-ebd3-4cc9-8acf-27421fcdb72b",
+    "word": "annual",
+    "ipa": "/ˈæn.ju.əl/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An annual publication; a book, periodical, journal, report, comic book, yearbook, etc., which is published serially once a year, which may or may not be in addition to regular weekly or monthly publication.",
+        "vietnamese": "[Cần dịch] An annual publication;..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "I read the magazine, but I usually don't purchase the annuals.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "47937501-0cb9-46d3-b274-215af0f4671e",
+    "word": "anticipate",
+    "ipa": "/ænˈtɪs.ɪ.peɪt/",
+    "partOfSpeech": "verb",
+    "definitions": [
+      {
+        "meaning": "To act before (someone), especially to prevent an action.",
+        "vietnamese": "[Cần dịch] To act before..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "expect",
+      "foresee",
+      "foretaste"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "0c5e4a6f-7c53-4089-9a58-fff722d85f44",
+    "word": "anxiety",
+    "ipa": "/ˌæŋ(ɡ)ˈzaɪ.ə.ti/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An unpleasant state of mental uneasiness, nervousness, apprehension and obsession or concern about some uncertain event.",
+        "vietnamese": "[Cần dịch] An unpleasant state..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "apprehension",
+      "care",
+      "disquiet"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "987740f1-a3f3-4cab-b72d-193276cc4904",
+    "word": "apology",
+    "ipa": "/əˈpɒl.ə.dʒi/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An expression of remorse or regret for having said or done something that harmed another: an instance of apologizing (saying that one is sorry).",
+        "vietnamese": "[Cần dịch] An expression of..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "The CEO made a public apology for the scandal, and promised full cooperation with the authorities.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "apologia"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "58b1f105-dd6f-41d0-9c8f-439d702aa4c6",
+    "word": "apparent",
+    "ipa": "/əˈpæ.ɹənt/",
+    "partOfSpeech": "adjective",
+    "definitions": [
+      {
+        "meaning": "Capable of being seen, or easily seen; open to view; visible to the eye, eyely; within sight or view.",
+        "vietnamese": "[Cần dịch] Capable of being..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [
+      "clear",
+      "distinct",
+      "obvious"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "44193397-0b91-4a4c-bdda-e34478e63876",
+    "word": "appeal",
+    "ipa": "/əˈpiːl/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "An application for the removal of a cause or suit from an inferior to a superior judge or court for re-examination or review.",
+        "vietnamese": "[Cần dịch] An application for..."
+      }
+    ],
+    "examples": [],
+    "synonyms": [],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  },
+  {
+    "id": "f12621db-28ed-4f61-94a4-600069676b63",
+    "word": "appearance",
+    "ipa": "/əˈpɪəɹəns/",
+    "partOfSpeech": "noun",
+    "definitions": [
+      {
+        "meaning": "The act of appearing or coming into sight; the act of becoming visible to the eye.",
+        "vietnamese": "[Cần dịch] The act of..."
+      }
+    ],
+    "examples": [
+      {
+        "sentence": "His sudden appearance surprised me.",
+        "vietnamese": "[Cần dịch]"
+      }
+    ],
+    "synonyms": [
+      "apparition",
+      "phenomenon",
+      "presence"
+    ],
+    "antonyms": [],
+    "tags": [
+      "crawled"
+    ],
+    "difficulty": 3,
+    "imageUrls": []
+  }
+]

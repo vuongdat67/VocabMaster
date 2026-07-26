@@ -19,6 +19,7 @@ const CrosswordGamePage = lazy(() => import('@/pages/CrosswordGamePage').then(m 
 const WordleGamePage = lazy(() => import('@/pages/WordleGamePage').then(m => ({ default: m.WordleGamePage })))
 const SwipeFlashcardPage = lazy(() => import('@/pages/SwipeFlashcardPage').then(m => ({ default: m.SwipeFlashcardPage })))
 const ContextGamePage = lazy(() => import('@/pages/ContextGamePage').then(m => ({ default: m.ContextGamePage })))
+const DictionaryPage = lazy(() => import('@/pages/DictionaryPage').then(m => ({ default: m.DictionaryPage })))
 
 function LoadingFallback() {
   return (
@@ -42,6 +43,7 @@ export const router = createHashRouter([
       { path: 'learn', element: <Suspense fallback={<LoadingFallback />}><LearningSessionPage /></Suspense> },
       { path: 'words', element: <Suspense fallback={<LoadingFallback />}><WordListPage /></Suspense> },
       { path: 'words/:id', element: <Suspense fallback={<LoadingFallback />}><WordDetailPage /></Suspense> },
+      { path: 'dictionary', element: <Suspense fallback={<LoadingFallback />}><DictionaryPage /></Suspense> },
       { path: 'import', element: <Suspense fallback={<LoadingFallback />}><ImportPage /></Suspense> },
       { path: 'review', element: <Suspense fallback={<LoadingFallback />}><ReviewPage /></Suspense> },
       { path: 'stats', element: <Suspense fallback={<LoadingFallback />}><StatsPage /></Suspense> },
