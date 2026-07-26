@@ -1112,6 +1112,35 @@ export const THEME_PRESETS: ThemePreset[] = [
       '--accent-500': '#bfab71',
     }
   },
+  {
+    id: 'kidspace',
+    name: 'KidSpace',
+    icon: '🧸',
+    swatchLight: '#FFF5F7',
+    swatchDark: '#2B455E',
+    light: {
+      '--surface': '#FFF5F7',
+      '--surface-secondary': '#FDE8ED',
+      '--surface-tertiary': '#FAD1D8',
+      '--surface-card': '#FFFFFF',
+      '--text-primary': '#5A3E40',
+      '--text-secondary': '#8A6A6D',
+      '--text-tertiary': '#A88D90',
+      '--border-default': '#FAD1D8',
+      '--accent-500': '#FF9AA2',
+    },
+    dark: {
+      '--surface': '#2B455E',
+      '--surface-secondary': '#1E3247',
+      '--surface-tertiary': '#142538',
+      '--surface-card': '#1C2C3F',
+      '--text-primary': '#BAE1FF',
+      '--text-secondary': '#8DBDE6',
+      '--text-tertiary': '#669BC7',
+      '--border-default': '#3D5E7D',
+      '--accent-500': '#FFB3BA',
+    }
+  },
 ]
 
 export function getPreset(id: string): ThemePreset {

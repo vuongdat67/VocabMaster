@@ -1,4 +1,6 @@
 export { Button } from './Button'
+export { ThemeSwitcher } from './ThemeSwitcher'
+export { FolderEditModal } from './FolderEditModal'
 export { Card } from './Card'
 export { Badge } from './Badge'
 export { ProgressBar } from './ProgressBar'

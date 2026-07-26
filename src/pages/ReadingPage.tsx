@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, Volume2, Plus, X, Loader2, Check } from 'lucide-react'
+import { BookOpen, Volume2, Plus, X, Loader2, Check, Play, Pause, Square, Clock, Cat } from 'lucide-react'
 import { ARTICLES, Article } from '@/data/articles'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -137,34 +137,142 @@ function ArticleReader({ article, onBack }: { article: Article; onBack: () => vo
     }
   }
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="flex flex-col md:flex-row gap-6 items-start"
-    >
-      <Card className="flex-1 p-6 md:p-8">
-        <button onClick={onBack} className="text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 inline-flex items-center gap-2">
-          &larr; Quay lại danh sách
-        </button>
-        <h2 className="text-3xl font-black text-gray-900 dark:text-gray-100 mb-6">{article.title}</h2>
-        <div className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-          {words.map((w, i) => {
-            const isClickable = /[a-zA-Z]/.test(w)
-            if (!isClickable) return <span key={i}>{w}</span>
-            return (
-              <span 
-                key={i} 
-                onClick={() => handleWordClick(w)}
-                className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:text-blue-700 dark:hover:text-blue-300 rounded transition-colors px-0.5"
+    const estimatedMinutes = Math.max(1, Math.ceil(words.length / 150))
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [isPaused, setIsPaused] = useState(false)
+    const [currentBoundary, setCurrentBoundary] = useState(-1)
+    
+    useEffect(() => {
+      return () => {
+        window.speechSynthesis.cancel()
+      }
+    }, [])
+  
+    const titleOffset = article.title.length + 2 // "Title. "
+
+    // Pre-calculate word offsets
+    let currentOffset = 0
+    const wordOffsets = words.map(w => {
+      const start = currentOffset
+      const end = currentOffset + w.length
+      currentOffset = end
+      return { word: w, start, end }
+    })
+
+    const handlePlayTTS = () => {
+      if (isPaused) {
+        window.speechSynthesis.resume()
+        setIsPaused(false)
+        setIsPlaying(true)
+        return
+      }
+      window.speechSynthesis.cancel()
+      setCurrentBoundary(-1)
+      const utterance = new SpeechSynthesisUtterance(article.title + '. ' + article.content)
+      utterance.lang = 'en-US'
+      utterance.rate = 0.9
+      utterance.onboundary = (e) => {
+        if (e.name === 'word') {
+          setCurrentBoundary(e.charIndex)
+        }
+      }
+      utterance.onend = () => {
+        setIsPlaying(false)
+        setIsPaused(false)
+        setCurrentBoundary(-1)
+      }
+      window.speechSynthesis.speak(utterance)
+      setIsPlaying(true)
+      setIsPaused(false)
+    }
+  
+    const handlePauseTTS = () => {
+      window.speechSynthesis.pause()
+      setIsPaused(true)
+      setIsPlaying(false)
+    }
+  
+    const handleStopTTS = () => {
+      window.speechSynthesis.cancel()
+      setIsPlaying(false)
+      setIsPaused(false)
+      setCurrentBoundary(-1)
+    }
+  
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="flex flex-col md:flex-row gap-6 items-start relative"
+      >
+        <Card className="flex-1 p-6 md:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <button onClick={() => { handleStopTTS(); onBack(); }} className="text-sm font-medium text-gray-500 hover:text-gray-900 inline-flex items-center gap-2">
+              &larr; Quay lại
+            </button>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 rounded-full">
+              <Clock className="w-4 h-4 text-amber-500" />
+              Khoảng {estimatedMinutes} phút
+            </div>
+          </div>
+          
+          <h2 className="text-3xl font-black text-gray-900 dark:text-gray-100 mb-4">{article.title}</h2>
+          
+          {/* TTS Controls */}
+          <div className="flex items-center gap-2 mb-6 bg-blue-50/50 dark:bg-blue-900/10 p-2 rounded-xl w-fit">
+            {!isPlaying ? (
+              <Button size="sm" variant="ghost" className="text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800" onClick={handlePlayTTS}>
+                <Play className="w-4 h-4 mr-1" /> Nghe đọc
+              </Button>
+            ) : (
+              <Button size="sm" variant="ghost" className="text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800" onClick={handlePauseTTS}>
+                <Pause className="w-4 h-4 mr-1" /> Tạm dừng
+              </Button>
+            )}
+            {(isPlaying || isPaused) && (
+              <Button size="sm" variant="ghost" className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={handleStopTTS}>
+                <Square className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
+  
+          <div className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+            {wordOffsets.map((wObj, i) => {
+              const isClickable = /[a-zA-Z]/.test(wObj.word)
+              const contentCharIndex = currentBoundary - titleOffset
+              const isHighlighted = (isPlaying || isPaused) && contentCharIndex >= wObj.start && contentCharIndex < wObj.end
+              const highlightClass = isHighlighted ? 'bg-amber-200 dark:bg-amber-500/40 text-amber-900 dark:text-amber-100' : ''
+              
+              if (!isClickable) return <span key={i} className={highlightClass}>{wObj.word}</span>
+              return (
+                <span 
+                  key={i} 
+                  onClick={() => handleWordClick(wObj.word)}
+                  className={`cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:text-blue-700 dark:hover:text-blue-300 rounded transition-colors px-0.5 ${highlightClass}`}
+                >
+                  {wObj.word}
+                </span>
+              )
+            })}
+          </div>
+          
+          {/* Mascot Thư giãn */}
+          {(isPlaying || isPaused) && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="absolute -right-8 -bottom-8 md:-right-16 md:top-32 text-purple-400 opacity-60"
+            >
+              <motion.div
+                animate={isPlaying ? { y: [0, -10, 0] } : {}}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               >
-                {w}
-              </span>
-            )
-          })}
-        </div>
-      </Card>
+                <Cat className="w-24 h-24" />
+              </motion.div>
+            </motion.div>
+          )}
+        </Card>
 
       <div className="w-full md:w-80 shrink-0 sticky top-4">
         <AnimatePresence mode="wait">

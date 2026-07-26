@@ -4,6 +4,7 @@ import { Mic, MicOff, RefreshCw, Trophy, Volume2, ArrowRight } from 'lucide-reac
 import { wordRepo } from '@/db/word-repo'
 import type { Word } from '@/types/word'
 import { Card } from '@/components/ui/Card'
+import { useSoundEffects } from '@/hooks/useSoundEffects'
 
 declare global {
   interface Window {
@@ -15,6 +16,7 @@ declare global {
 const STORAGE_KEY = 'speech_game_state'
 
 export function SpeechGamePage() {
+  const { playCorrect, playWrong } = useSoundEffects()
   const [words, setWords] = useState<Word[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isListening, setIsListening] = useState(false)
@@ -95,17 +97,16 @@ export function SpeechGamePage() {
 
   useEffect(() => {
     if (transcript && currentWord && !isListening) {
-      evaluatePronunciation(transcript)
+      evaluatePronunciation(transcript, currentWord.word)
     }
   }, [transcript, isListening])
 
-  const evaluatePronunciation = (spoken: string) => {
-    if (!currentWord) return
-    const target = currentWord.word.toLowerCase().replace(/[^a-z0-9]/g, '')
-    const actual = spoken.toLowerCase().replace(/[^a-z0-9]/g, '')
+  const evaluatePronunciation = (spoken: string, expected: string) => {
+    const target = expected.toLowerCase().replace(/[.,?!]/g, '').trim()
+    const actual = spoken.toLowerCase().replace(/[.,?!]/g, '').trim()
 
     let newScore = 0
-    if (target === actual) {
+    if (actual === target) {
       newScore = 100
     } else if (actual.includes(target) || target.includes(actual)) {
       newScore = 80
@@ -116,6 +117,9 @@ export function SpeechGamePage() {
     setScore(newScore)
     if (newScore >= 70) {
       setTotalScore(prev => prev + 10)
+      playCorrect()
+    } else {
+      playWrong()
     }
   }
 

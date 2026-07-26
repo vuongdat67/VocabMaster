@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('@/pages/HomePage').then(m => ({ default: m.H
 const LearningSessionPage = lazy(() => import('@/pages/LearningSessionPage').then(m => ({ default: m.LearningSessionPage })))
 const WordListPage = lazy(() => import('@/pages/WordListPage').then(m => ({ default: m.WordListPage })))
 const ReadingPage = lazy(() => import('@/pages/ReadingPage').then(m => ({ default: m.ReadingPage })))
+const ExplorePage = lazy(() => import('@/pages/ExplorePage').then(m => ({ default: m.ExplorePage })))
 const WordDetailPage = lazy(() => import('@/pages/WordDetailPage').then(m => ({ default: m.WordDetailPage })))
 const ImportPage = lazy(() => import('@/pages/ImportPage').then(m => ({ default: m.ImportPage })))
 const ReviewPage = lazy(() => import('@/pages/ReviewPage').then(m => ({ default: m.ReviewPage })))
@@ -22,6 +23,8 @@ const SwipeFlashcardPage = lazy(() => import('@/pages/SwipeFlashcardPage').then(
 const ContextGamePage = lazy(() => import('@/pages/ContextGamePage').then(m => ({ default: m.ContextGamePage })))
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage').then(m => ({ default: m.DictionaryPage })))
 const SpeechGamePage = lazy(() => import('@/pages/SpeechGamePage').then(m => ({ default: m.SpeechGamePage })))
+const ListenTouchGamePage = lazy(() => import('@/pages/ListenTouchGamePage').then(m => ({ default: m.ListenTouchGamePage })))
+const ShadowingGamePage = lazy(() => import('@/pages/ShadowingGamePage').then(m => ({ default: m.ShadowingGamePage })))
 const AuthPage = lazy(() => import('@/pages/AuthPage').then(m => ({ default: m.AuthPage })))
 
 function LoadingFallback() {
@@ -46,6 +49,7 @@ export const router = createHashRouter([
       { path: 'auth', element: <Suspense fallback={<LoadingFallback />}><AuthPage /></Suspense> },
       { path: 'learn', element: <Suspense fallback={<LoadingFallback />}><LearningSessionPage /></Suspense> },
       { path: 'reading', element: <Suspense fallback={<LoadingFallback />}><ReadingPage /></Suspense> },
+      { path: 'explore', element: <Suspense fallback={<LoadingFallback />}><ExplorePage /></Suspense> },
       { path: 'words', element: <Suspense fallback={<LoadingFallback />}><WordListPage /></Suspense> },
       { path: 'words/:id', element: <Suspense fallback={<LoadingFallback />}><WordDetailPage /></Suspense> },
       { path: 'dictionary', element: <Suspense fallback={<LoadingFallback />}><DictionaryPage /></Suspense> },
@@ -61,6 +65,8 @@ export const router = createHashRouter([
       { path: 'games/swipe', element: <Suspense fallback={<LoadingFallback />}><SwipeFlashcardPage /></Suspense> },
       { path: 'games/context', element: <Suspense fallback={<LoadingFallback />}><ContextGamePage /></Suspense> },
       { path: 'games/speech', element: <Suspense fallback={<LoadingFallback />}><SpeechGamePage /></Suspense> },
+      { path: 'games/listentouch', element: <Suspense fallback={<LoadingFallback />}><ListenTouchGamePage /></Suspense> },
+      { path: 'games/shadowing', element: <Suspense fallback={<LoadingFallback />}><ShadowingGamePage /></Suspense> },
       // Wind garden
       { path: 'wind', element: <Suspense fallback={<LoadingFallback />}><WindPage /></Suspense> },
       // Image Manager

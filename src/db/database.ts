@@ -3,9 +3,11 @@ import type { Word, WordPack } from '@/types/word'
 import type { SRSData, LearningSession } from '@/types/learning'
 import type { UserSettings } from '@/types/settings'
 import type { UserStats, WeeklyActivity } from '@/types/stats'
+import type { Folder } from '@/types/folder'
 
 export class VocabDatabase extends Dexie {
   words!: Table<Word, string>
+  folders!: Table<Folder, string>
   srsData!: Table<SRSData, string>
   sessions!: Table<LearningSession, string>
   wordPacks!: Table<WordPack, string>
@@ -23,6 +25,9 @@ export class VocabDatabase extends Dexie {
       settings: 'key',
       stats: '++id',
       weeklyActivity: 'date',
+    })
+    this.version(2).stores({
+      folders: 'id, name, createdAt'
     })
   }
 }

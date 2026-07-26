@@ -1,18 +1,21 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Search, Volume2, BookOpen, Play, X, Upload, Trash2, Image as ImageIcon, Plus, Star, Edit } from 'lucide-react'
+import { Search, Volume2, BookOpen, Play, X, Upload, Trash2, Image as ImageIcon, Plus, Star, Edit, Folder as FolderIcon, LibraryBig } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { wordRepo } from '@/db/word-repo'
 import { progressRepo } from '@/db/progress-repo'
+import { folderRepo } from '@/db/folder-repo'
 import { useAudio } from '@/hooks/useAudio'
 import { useLearningSession } from '@/hooks/useLearningSession'
 import { WordEditModal } from '@/components/ui/WordEditModal'
+import { FolderEditModal } from '@/components/ui/FolderEditModal'
 import { v4 as uuidv4 } from 'uuid'
 import { getImageForWord } from '@/lib/image-search'
 import type { Word, PartOfSpeech } from '@/types/word'
+import type { Folder } from '@/types/folder'
 
 const PARTS_OF_SPEECH: PartOfSpeech[] = [
 	'noun', 'verb', 'adjective', 'adverb', 'preposition',
@@ -69,6 +72,7 @@ export function WordListPage() {
 	const [filtered, setFiltered] = useState<Word[]>([])
 	const [searchQuery, setSearchQuery] = useState('')
 	const [tags, setTags] = useState<string[]>([])
+	const [folders, setFolders] = useState<Folder[]>([])
 	const [selectedTag, setSelectedTag] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [studiedIds, setStudiedIds] = useState<Set<string>>(new Set())
@@ -78,6 +82,8 @@ export function WordListPage() {
 	// CRUD states
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [editWord, setEditWord] = useState<Word | null>(null)
+	const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
+	const [editFolder, setEditFolder] = useState<Folder | null>(null)
 
 	// Dropdown filter states
 	const [statusFilter, setStatusFilter] = useState<'all' | 'studied' | 'unstudied'>('all')
@@ -93,11 +99,13 @@ export function WordListPage() {
 			try {
 				const allWords = await wordRepo.getAll()
 				const allTags = await wordRepo.getAllTags()
+				const allFolders = await folderRepo.getAll()
 				const srsEntries = await progressRepo.bulkGetSRS(allWords.map((w) => w.id))
 				const studied = new Set(srsEntries.map((s) => s.wordId))
 				setWords(allWords)
 				setFiltered(allWords)
 				setTags(allTags)
+				setFolders(allFolders)
 				setStudiedIds(studied)
 			} catch (err) {
 				console.error('Failed to load words:', err)
@@ -328,36 +336,84 @@ export function WordListPage() {
 				</div>
 			</div>
 
-			{/* Tag filter pills */}
-			{tags.length > 0 && (
-				<div className="flex flex-wrap gap-2">
+			{/* Tag filter pills / Folders */}
+			{(tags.length > 0 || folders.length > 0) && (
+				<div className="flex flex-wrap gap-2 mb-4 bg-gray-50/50 p-3 rounded-xl border border-gray-100 dark:bg-gray-800/30 dark:border-gray-700 items-center">
+					<div className="w-full flex justify-between items-center mb-1">
+						<span className="text-sm font-semibold text-gray-500">Thư mục & Chủ đề</span>
+						<Button size="sm" variant="ghost" className="text-gray-400 hover:text-gray-700" onClick={() => { setEditFolder(null); setIsFolderModalOpen(true); }}>
+							<Plus className="w-4 h-4 mr-1" /> Tạo thư mục
+						</Button>
+					</div>
 					<button
 						onClick={() => handleTagFilter(null)}
-						className={`px-3 py-1 rounded-full text-sm transition-colors ${
+						className={`px-4 py-1.5 rounded-xl text-sm transition-all flex items-center gap-1.5 ${
 							selectedTag === null
-								? 'text-white shadow-sm'
-								: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+								? 'text-white shadow-md'
+								: 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700'
 						}`}
 						style={selectedTag === null ? { backgroundColor: 'var(--accent-500)' } : undefined}
 					>
-						Tất cả
+						<LibraryBig className="w-4 h-4" /> Tất cả
 					</button>
-					{tags.map((tag) => (
-						<button
-							key={tag}
-							onClick={() => handleTagFilter(tag)}
-							className={`px-3 py-1 rounded-full text-sm transition-colors ${
-								selectedTag === tag
-									? 'text-white shadow-sm'
-									: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-							}`}
-							style={selectedTag === tag ? { backgroundColor: 'var(--accent-500)' } : undefined}
-						>
-							{tag}
-						</button>
-					))}
+					
+					{/* Map over unique tags/folders */}
+					{Array.from(new Set([...tags, ...folders.map(f => f.id)])).map((tagOrFolderId) => {
+						const folder = folders.find(f => f.id === tagOrFolderId)
+						const displayName = folder ? folder.name : tagOrFolderId.replace('-', ' ')
+						const icon = folder ? folder.icon : '📁'
+						const bgClass = selectedTag === tagOrFolderId 
+							? (folder ? folder.color : 'bg-blue-500') 
+							: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+
+						return (
+							<div key={tagOrFolderId} className="group relative flex items-center">
+								<button
+									onClick={() => handleTagFilter(tagOrFolderId)}
+									className={`px-4 py-1.5 rounded-xl text-sm transition-all flex items-center gap-1.5 capitalize ${
+										selectedTag === tagOrFolderId ? 'text-white shadow-md ' + bgClass : bgClass
+									}`}
+									style={selectedTag === tagOrFolderId && !folder ? { backgroundColor: 'var(--accent-500)' } : undefined}
+								>
+									<span>{icon}</span> {displayName}
+								</button>
+								{folder && (
+									<button 
+										onClick={(e) => { e.stopPropagation(); setEditFolder(folder); setIsFolderModalOpen(true); }}
+										className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full p-1 text-gray-400 hover:text-blue-500 transition-opacity shadow-sm"
+									>
+										<Edit className="w-3 h-3" />
+									</button>
+								)}
+							</div>
+						)
+					})}
 				</div>
 			)}
+
+			<FolderEditModal 
+				isOpen={isFolderModalOpen}
+				onClose={() => setIsFolderModalOpen(false)}
+				folder={editFolder}
+				onSave={async (fData) => {
+					if (editFolder) {
+						await folderRepo.update(editFolder.id, fData)
+						setFolders(prev => prev.map(f => f.id === editFolder.id ? { ...f, ...fData } as Folder : f))
+					} else {
+						const newId = fData.name?.toLowerCase().replace(/\s+/g, '-') || uuidv4()
+						const newFolder: Folder = {
+							id: newId,
+							name: fData.name!,
+							icon: fData.icon!,
+							color: fData.color!,
+							createdAt: Date.now(),
+							updatedAt: Date.now()
+						}
+						await folderRepo.add(newFolder)
+						setFolders(prev => [...prev, newFolder])
+					}
+				}}
+			/>
 
 			{/* Search bar + Learn selected button */}
 			<div className="flex gap-3">

@@ -17,4 +17,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test-setup.ts',
   },
+  build: {
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+          db: ['dexie', '@supabase/supabase-js'],
+          ui: ['lucide-react']
+        }
+      }
+    }
+  }
 })

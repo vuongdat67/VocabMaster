@@ -139,21 +139,26 @@ export function ContextGamePage() {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent | KeyboardEvent) => {
     if (e.key === 'Enter') {
+      if (e.repeat) return
+      e.preventDefault()
       if (isChecked) nextQuestion()
       else checkAnswer()
     }
   }
 
   useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && isChecked && gameState === 'playing') {
+    const handleGlobal = (e: KeyboardEvent) => {
+      // Only handle global enter if input is disabled/not focused
+      if (e.key === 'Enter' && isChecked && gameState === 'playing' && document.activeElement?.tagName !== 'INPUT') {
+        if (e.repeat) return
+        e.preventDefault()
         nextQuestion()
       }
     }
-    window.addEventListener('keydown', handleGlobalKeyDown)
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown)
+    window.addEventListener('keydown', handleGlobal)
+    return () => window.removeEventListener('keydown', handleGlobal)
   }, [isChecked, gameState, nextQuestion])
 
   if (gameState === 'setup') {
@@ -225,7 +230,7 @@ export function ContextGamePage() {
               onKeyDown={handleKeyDown}
               className="mx-2 w-32 md:w-48 border-b-4 border-gray-300 focus:border-purple-500 outline-none text-center bg-gray-50 px-2 py-1 rounded-t-lg transition-colors font-bold text-purple-700"
               style={{ width: `${Math.max(4, userInput.length || q.word.word.length)}ch` }}
-              disabled={isChecked}
+              readOnly={isChecked}
             />
           )}
           {q.sentenceParts[2]}

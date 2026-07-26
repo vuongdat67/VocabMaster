@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
   BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search, Mic,
-  User, LogIn
+  User, LogIn, Compass
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -15,6 +15,7 @@ const mainLinks = [
   { to: '/dictionary', icon: Search, label: 'Tra từ' },
   { to: '/learn', icon: GraduationCap, label: 'Học tập' },
   { to: '/reading', icon: BookOpen, label: 'Góc đọc sách' },
+  { to: '/explore', icon: Compass, label: 'Khám phá' },
   { to: '/review', icon: Repeat, label: 'Ôn tập' },
   { to: '/words', icon: Edit3, label: 'Từ vựng' },
 ]
