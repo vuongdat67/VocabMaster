@@ -40,8 +40,11 @@ function getFallbackColor(id: string): string {
  return FALLBACK_COLORS[Math.abs(hash) % FALLBACK_COLORS.length] ?? '#6366f1'
 }
 
+import { useSettingsStore } from '@/stores/settings-store'
+
 function useSoundEffects() {
- const [soundEnabled, setSoundEnabled] = useState(true)
+  const { settings } = useSettingsStore()
+  const [soundEnabled, setSoundEnabled] = useState(settings.sfxEnabled)
  const enabledRef = useRef(true)
  const ctxRef = useRef<AudioContext | null>(null)
 
@@ -267,6 +270,27 @@ export function SynonymMatchGame() {
  if (newMatched.size === pairs.length) {
  setGameComplete(true)
  playComplete()
+
+ const now = Date.now()
+ const totalTime = now - startTime.current
+ import('@/db/session-repo').then(({ sessionRepo }) => {
+ sessionRepo.save({
+ id: crypto.randomUUID(),
+ mode: 'synonym_match',
+ words: pairs.map(p => p.id),
+ results: pairs.map(p => ({
+ wordId: p.id,
+ isCorrect: true, 
+ responseTime: totalTime / pairs.length,
+ wasCloseCall: false,
+ mode: 'synonym_match',
+ timestamp: now
+ })),
+ startedAt: startTime.current,
+ completedAt: now,
+ totalTime
+ })
+ })
  }
  } else {
  playWrong()

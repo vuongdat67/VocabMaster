@@ -6,6 +6,11 @@ export type LearningMode =
   | 'fill_blank'
   | 'matching'
   | 'synonym_match'
+  | 'crossword'
+  | 'wordle'
+  | 'swipe'
+  | 'context'
+  | 'wind'
 
 export interface SRSData {
   wordId: string

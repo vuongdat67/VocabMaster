@@ -17,6 +17,7 @@ export function StatsPage() {
 		totalTime: 0,
 	})
 	const [modeData, setModeData] = useState<{ name: string; value: number }[]>([])
+	const [activityData, setActivityData] = useState<Record<string, number>>({})
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
@@ -31,7 +32,17 @@ export function StatsPage() {
 
 				// Count accuracy by mode
 				const modeResults: Record<string, { correct: number; wrong: number }> = {}
+				
+				// Activity Map (Heatmap)
+				const heatmap: Record<string, number> = {}
+
 				sessions.forEach((sess) => {
+					// Activity map logic
+					const dateStr = new Date(sess.startedAt).toISOString().split('T')[0] as string
+					if (dateStr) {
+					    heatmap[dateStr] = (heatmap[dateStr] || 0) + 1
+					}
+
 					sess.results.forEach((r) => {
 						if (!modeResults[r.mode]) modeResults[r.mode] = { correct: 0, wrong: 0 }
 						if (r.isCorrect) modeResults[r.mode]!.correct++
@@ -39,6 +50,8 @@ export function StatsPage() {
 					})
 				})
 
+				setActivityData(heatmap)
+				
 				setStats({
 					totalStudied: srsAll.length,
 					totalCorrect,
@@ -105,6 +118,54 @@ export function StatsPage() {
 					<p className="text-2xl font-bold text-gray-900">{stats.sessionsCompleted}</p>
 				</Card>
 			</div>
+
+			{/* Activity Heatmap */}
+			<Card className="p-6 overflow-hidden">
+				<h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+					<TrendingUp className="w-4 h-4 text-emerald-500" />
+					Mức độ hoạt động (90 ngày qua)
+				</h3>
+				<div className="flex flex-col items-center">
+					<div className="flex gap-1 overflow-x-auto pb-4 max-w-full">
+						{Array.from({ length: 13 }).map((_, weekIndex) => (
+							<div key={weekIndex} className="flex flex-col gap-1">
+								{Array.from({ length: 7 }).map((_, dayIndex) => {
+									const daysAgo = 89 - (weekIndex * 7 + dayIndex)
+									if (daysAgo < 0) return null
+									
+									const d = new Date()
+									d.setDate(d.getDate() - daysAgo)
+									const dateStr = d.toISOString().split('T')[0] as string
+									const count = activityData[dateStr] || 0
+									
+									let bgColor = 'bg-gray-100'
+									if (count > 0 && count <= 5) bgColor = 'bg-emerald-200'
+									else if (count > 5 && count <= 15) bgColor = 'bg-emerald-400'
+									else if (count > 15 && count <= 30) bgColor = 'bg-emerald-500'
+									else if (count > 30) bgColor = 'bg-emerald-600'
+
+									return (
+										<div 
+											key={dateStr}
+											title={`${dateStr}: ${count} buổi học`}
+											className={`w-4 h-4 rounded-sm ${bgColor} hover:ring-2 hover:ring-offset-1 hover:ring-emerald-400 transition-all cursor-pointer`}
+										/>
+									)
+								})}
+							</div>
+						))}
+					</div>
+					<div className="flex items-center gap-2 text-xs text-gray-500 mt-2 self-end">
+						<span>Ít</span>
+						<div className="w-3 h-3 rounded-sm bg-gray-100"></div>
+						<div className="w-3 h-3 rounded-sm bg-emerald-200"></div>
+						<div className="w-3 h-3 rounded-sm bg-emerald-400"></div>
+						<div className="w-3 h-3 rounded-sm bg-emerald-500"></div>
+						<div className="w-3 h-3 rounded-sm bg-emerald-600"></div>
+						<span>Nhiều</span>
+					</div>
+				</div>
+			</Card>
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				{/* Accuracy by mode chart */}

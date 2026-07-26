@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
-  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX
+  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -18,6 +18,10 @@ const mainLinks = [
 const gameLinks = [
   { to: '/games/matching', icon: Image, label: 'Nối từ-Ảnh' },
   { to: '/games/synonym', icon: Link2, label: 'Đồng nghĩa' },
+  { to: '/games/crossword', icon: Grid3x3, label: 'Ô chữ' },
+  { to: '/games/wordle', icon: LayoutTemplate, label: 'Đoán từ' },
+  { to: '/games/swipe', icon: Layers, label: 'Quẹt thẻ' },
+  { to: '/games/context', icon: Edit3, label: 'Điền từ' },
   { to: '/wind', icon: Wind, label: 'Vườn Từ' },
 ]
 
@@ -30,7 +34,7 @@ const bottomLinks = [
 
 export function Sidebar() {
   const { sidebarOpen, toggleSidebar } = useUIStore()
-  const soundEnabled = useSettingsStore(state => state.settings.soundEnabled)
+  const bgmEnabled = useSettingsStore(state => state.settings.bgmEnabled)
   const updateSettings = useSettingsStore(state => state.updateSettings)
 
   return (
@@ -98,11 +102,11 @@ export function Sidebar() {
           <ThemeSwitcher sidebarOpen={sidebarOpen} />
           
           <button
-            onClick={() => updateSettings({ soundEnabled: !soundEnabled })}
+            onClick={() => updateSettings({ bgmEnabled: !bgmEnabled })}
             className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 text-gray-500 hover:text-gray-700 hover:bg-gray-50 w-full"
             title="Bật/tắt nhạc nền"
           >
-            {soundEnabled ? <Music className="w-[18px] h-[18px] shrink-0" /> : <VolumeX className="w-[18px] h-[18px] shrink-0" />}
+            {bgmEnabled ? <Music className="w-[18px] h-[18px] shrink-0" /> : <VolumeX className="w-[18px] h-[18px] shrink-0" />}
             {sidebarOpen && <span className="text-sm font-medium whitespace-nowrap">Nhạc nền</span>}
           </button>
 

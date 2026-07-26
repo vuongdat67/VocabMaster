@@ -7,7 +7,7 @@ export function useAudio() {
 
   const play = useCallback(
     (url: string) => {
-      if (!settings.soundEnabled) return
+      if (!settings.sfxEnabled) return
       try {
         if (audioRef.current) {
           audioRef.current.pause()
@@ -22,19 +22,19 @@ export function useAudio() {
         // Audio error, ignore
       }
     },
-    [settings.soundEnabled, settings.soundVolume]
+    [settings.sfxEnabled, settings.soundVolume]
   )
 
   const speak = useCallback(
     (text: string) => {
-      if (!settings.soundEnabled || !('speechSynthesis' in window)) return
+      if (!settings.sfxEnabled || !('speechSynthesis' in window)) return
       window.speechSynthesis.cancel()
       const utterance = new SpeechSynthesisUtterance(text)
       utterance.rate = 0.9
       utterance.volume = settings.soundVolume
       window.speechSynthesis.speak(utterance)
     },
-    [settings.soundEnabled, settings.soundVolume]
+    [settings.sfxEnabled, settings.soundVolume]
   )
 
   return { play, speak }

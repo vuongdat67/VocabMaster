@@ -502,35 +502,7 @@ export const THEME_PRESETS: ThemePreset[] = [
       '--accent-500': '#ad849e',
     }
   },
-  {
-    id: 'cyberpunk',
-    name: 'Cyberpunk',
-    icon: '🍑',
-    swatchLight: '#f0fef6',
-    swatchDark: '#1a0500',
-    light: {
-      '--surface': '#f0fef6',
-      '--surface-secondary': '#ba9567',
-      '--surface-tertiary': '#bb9567',
-      '--surface-card': '#f0fef6',
-      '--text-primary': '#100d16',
-      '--text-secondary': '#be95b2',
-      '--text-tertiary': '#bd95b2',
-      '--border-default': '#83a4bf',
-      '--accent-500': '#699680',
-    },
-    dark: {
-      '--surface': '#1a0500',
-      '--surface-secondary': '#b08e79',
-      '--surface-tertiary': '#af8e79',
-      '--surface-card': '#1a0500',
-      '--text-primary': '#dfccf4',
-      '--text-secondary': '#408778',
-      '--text-tertiary': '#418778',
-      '--border-default': '#994145',
-      '--accent-500': '#4d336a',
-    }
-  },
+
   {
     id: 'valentine',
     name: 'Valentine',

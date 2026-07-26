@@ -5,7 +5,8 @@ export interface UserSettings {
   theme: ThemeMode
   themeColor: ThemeColor
   themePreset: string
-  soundEnabled: boolean
+  bgmEnabled: boolean
+  sfxEnabled: boolean
   soundVolume: number
   mascotPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
   mascotCustomPosition?: { x: number; y: number }
@@ -25,7 +26,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   theme: 'system',
   themeColor: 'indigo',
   themePreset: 'zinc',
-  soundEnabled: true,
+  bgmEnabled: false,
+  sfxEnabled: true,
   soundVolume: 0.7,
   mascotPosition: 'bottom-right',
   mascotType: 'animal',

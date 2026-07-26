@@ -15,6 +15,10 @@ const MatchingGamePage = lazy(() => import('@/pages/MatchingGamePage').then(m =>
 const SynonymGamePage = lazy(() => import('@/pages/SynonymGamePage').then(m => ({ default: m.SynonymGamePage })))
 const WindPage = lazy(() => import('@/pages/WindPage').then(m => ({ default: m.WindPage })))
 const ImageManagerPage = lazy(() => import('@/pages/ImageManagerPage').then(m => ({ default: m.ImageManagerPage })))
+const CrosswordGamePage = lazy(() => import('@/pages/CrosswordGamePage').then(m => ({ default: m.CrosswordGamePage })))
+const WordleGamePage = lazy(() => import('@/pages/WordleGamePage').then(m => ({ default: m.WordleGamePage })))
+const SwipeFlashcardPage = lazy(() => import('@/pages/SwipeFlashcardPage').then(m => ({ default: m.SwipeFlashcardPage })))
+const ContextGamePage = lazy(() => import('@/pages/ContextGamePage').then(m => ({ default: m.ContextGamePage })))
 
 function LoadingFallback() {
   return (
@@ -45,6 +49,10 @@ export const router = createBrowserRouter([
       // Games
       { path: 'games/matching', element: <Suspense fallback={<LoadingFallback />}><MatchingGamePage /></Suspense> },
       { path: 'games/synonym', element: <Suspense fallback={<LoadingFallback />}><SynonymGamePage /></Suspense> },
+      { path: 'games/crossword', element: <Suspense fallback={<LoadingFallback />}><CrosswordGamePage /></Suspense> },
+      { path: 'games/wordle', element: <Suspense fallback={<LoadingFallback />}><WordleGamePage /></Suspense> },
+      { path: 'games/swipe', element: <Suspense fallback={<LoadingFallback />}><SwipeFlashcardPage /></Suspense> },
+      { path: 'games/context', element: <Suspense fallback={<LoadingFallback />}><ContextGamePage /></Suspense> },
       // Wind garden
       { path: 'wind', element: <Suspense fallback={<LoadingFallback />}><WindPage /></Suspense> },
       // Image Manager

@@ -23,11 +23,11 @@ export function AppShell() {
 
  // Gentle wind ambient sound
  useEffect(() => {
- if (settings.soundEnabled) {
+ if (settings.bgmEnabled) {
  startWindAmbient(0.12)
  }
  return () => stopWindAmbient()
- }, [settings.soundEnabled])
+ }, [settings.bgmEnabled])
 
  return (
  <div className="flex h-screen bg-gray-50">

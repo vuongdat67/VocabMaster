@@ -38,8 +38,11 @@ function getFallbackColor(id: string): string {
   return FALLBACK_COLORS[Math.abs(hash) % FALLBACK_COLORS.length] ?? '#6366f1'
 }
 
+import { useSettingsStore } from '@/stores/settings-store'
+
 function useSoundEffects() {
-  const [soundEnabled, setSoundEnabled] = useState(true)
+  const { settings } = useSettingsStore()
+  const [soundEnabled, setSoundEnabled] = useState(settings.sfxEnabled)
   const enabledRef = useRef(true)
 
   useEffect(() => {
@@ -214,6 +217,28 @@ export function MatchingGame() {
       if (newMatched.size === words.length) {
         setGameComplete(true)
         playComplete()
+        
+        const now = Date.now()
+        const totalTime = now - startTime.current
+        import('@/db/session-repo').then(({ sessionRepo }) => {
+          sessionRepo.save({
+            id: crypto.randomUUID(),
+            mode: 'matching',
+            words: words.map(w => w.id),
+            results: words.map(w => ({
+              wordId: w.id,
+              isCorrect: true, // We don't track per-word mistakes easily here
+              responseTime: totalTime / words.length,
+              wasCloseCall: false,
+              mode: 'matching',
+              timestamp: now
+            })),
+            startedAt: startTime.current,
+            completedAt: now,
+            totalTime
+          })
+        })
+        
         setTimeout(() => speak('Perfect!'), 300)
       } else {
         speak(words.find((w) => w.id === wordPairId)?.word ?? '')
@@ -320,13 +345,14 @@ export function MatchingGame() {
                     <span className="text-[12px] text-gray-500 leading-tight block">{item.vietnamese}</span>
                   )}
                 </div>
-                <button
+                <div
+                  role="button"
                   onClick={(e) => { e.stopPropagation(); speak(item.content) }}
-                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 shrink-0"
+                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 shrink-0 cursor-pointer"
                   style={{ color: 'var(--accent-500)' }}
                 >
                   <Volume2 className="w-3.5 h-3.5" />
-                </button>
+                </div>
               </motion.button>
             )
           })}

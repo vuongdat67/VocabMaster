@@ -85,13 +85,13 @@ export function WindPage() {
           y: Math.max(2, Math.min(65, b.y + (Math.random() - 0.5) * b.driftY * 0.2)),
         }))
       )
-      if (Math.random() > 0.6 && settings.soundEnabled) {
+      if (Math.random() > 0.6 && settings.sfxEnabled) {
         playWindChime(0.1 + Math.random() * 0.2)
       }
     }, 3500)
 
     return () => clearInterval(interval)
-  }, [enabled, words.length, settings.soundEnabled])
+  }, [enabled, words.length, settings.sfxEnabled])
 
   const handleBubbleClick = useCallback(
     (bubble: WordBubble) => {
@@ -104,7 +104,7 @@ export function WindPage() {
       setActiveWord(bubble)
       setShowMeaning(false)
 
-      if (settings.soundEnabled) {
+      if (settings.sfxEnabled) {
         const intensity = 0.3 + (bubble.x / 100) * 0.4
         playWindChime(intensity)
       }
@@ -113,10 +113,10 @@ export function WindPage() {
 
       setTimeout(() => {
         setShowMeaning(true)
-        if (settings.soundEnabled) playCelebrationBells()
+        if (settings.sfxEnabled) playCelebrationBells()
       }, 600)
     },
-    [activeWord, showMeaning, settings.soundEnabled, speak]
+    [activeWord, showMeaning, settings.sfxEnabled, speak]
   )
 
   const handleRefresh = () => {
@@ -163,7 +163,7 @@ export function WindPage() {
             size="sm"
             onClick={() => {
               setEnabled(!enabled)
-              if (!enabled && settings.soundEnabled) playWindChime(0.4)
+              if (!enabled && settings.sfxEnabled) playWindChime(0.4)
             }}
           >
             {enabled ? '🎐 Bật' : '🔇 Tắt'}

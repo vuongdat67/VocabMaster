@@ -123,10 +123,17 @@ export function SettingsPage() {
           <Volume2 className="w-4 h-4" style={{ color: 'var(--accent-500)' }} /> Âm thanh
         </h3>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">Âm thanh</span>
+          <span className="text-sm text-gray-600">Nhạc nền</span>
           <ToggleSwitch
-            checked={settings.soundEnabled}
-            onChange={(c) => updateSettings({ soundEnabled: c })}
+            checked={settings.bgmEnabled}
+            onChange={(c) => updateSettings({ bgmEnabled: c })}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-600">Hiệu ứng âm thanh</span>
+          <ToggleSwitch
+            checked={settings.sfxEnabled}
+            onChange={(c) => updateSettings({ sfxEnabled: c })}
           />
         </div>
         <div>

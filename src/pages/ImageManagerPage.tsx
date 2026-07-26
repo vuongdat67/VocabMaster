@@ -176,6 +176,34 @@ export function ImageManagerPage() {
 		setStatus(`Đã xóa ảnh của "${word.word}"`)
 	}, [])
 
+	const handleRefetchAll = useCallback(async () => {
+		if (!window.confirm("Thao tác này sẽ tải lại ảnh cho TOÀN BỘ từ vựng (kể cả những từ đã có ảnh). Chắc chắn không?")) return;
+		const target = words
+		setProcessing(true)
+		setProgress(0)
+		const total = target.length
+
+		for (let i = 0; i < total; i++) {
+			const w = target[i]!
+			setStatus(`Đang tải lại ảnh cho "${w.word}"... (${i + 1}/${total})`)
+
+			const imgUrl = await getImageForWord(w.word)
+			if (imgUrl) {
+				await wordRepo.update(w.id, { imageUrls: [imgUrl] })
+				setWords((prev) =>
+					prev.map((pw) =>
+						pw.id === w.id ? { ...pw, imageUrls: [imgUrl] } : pw
+					)
+				)
+			}
+
+			setProgress(i + 1)
+		}
+
+		setStatus(`Hoàn thành! Đã tải lại ảnh cho ${total} từ.`)
+		setProcessing(false)
+	}, [words])
+
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center h-64">
@@ -235,44 +263,54 @@ export function ImageManagerPage() {
 			</div>
 
 			{/* ── Batch actions ── */}
-			{wordsWithoutImages.length > 0 && (
-				<Card className="p-6">
-					<h3 className="font-semibold text-gray-900 mb-2">Tìm ảnh hàng loạt</h3>
-					<p className="text-sm text-gray-500 mb-4">
-						Tự động tìm ảnh cho {wordsWithoutImages.length} từ chưa có ảnh
-					</p>
+			<Card className="p-6">
+				<h3 className="font-semibold text-gray-900 mb-2">Tìm ảnh hàng loạt</h3>
+				<p className="text-sm text-gray-500 mb-4">
+					Tự động tìm ảnh hoặc tải lại ảnh cho kho từ vựng của bạn
+				</p>
 
-					{processing && (
-						<div className="mb-4 space-y-2">
-							<div className="flex items-center gap-2 text-sm" style={{ color: 'var(--accent-600)' }}>
-								<Loader2 className="w-4 h-4 animate-spin" />
-								{status}
-							</div>
-							<div className="w-full bg-gray-200 rounded-full h-2">
-								<motion.div
-									className="h-full rounded-full" style={{ backgroundColor: 'var(--accent-500)' }}
-									initial={{ width: 0 }}
-									animate={{ width: `${(progress / wordsWithoutImages.length) * 100}%` }}
-								/>
-							</div>
+				{processing && (
+					<div className="mb-4 space-y-2">
+						<div className="flex items-center gap-2 text-sm" style={{ color: 'var(--accent-600)' }}>
+							<Loader2 className="w-4 h-4 animate-spin" />
+							{status}
 						</div>
-					)}
+						<div className="w-full bg-gray-200 rounded-full h-2">
+							<motion.div
+								className="h-full rounded-full" style={{ backgroundColor: 'var(--accent-500)' }}
+								initial={{ width: 0 }}
+								animate={{ width: `${(progress / Math.max(1, wordsWithoutImages.length, words.length)) * 100}%` }}
+							/>
+						</div>
+					</div>
+				)}
 
-					{!processing && (
+				{!processing && (
+					<div className="flex items-center gap-3">
+						{wordsWithoutImages.length > 0 && (
+							<Button
+								onClick={handleFetchAll}
+								icon={<Search className="w-4 h-4" />}
+								disabled={processing}
+							>
+								Tìm ảnh cho từ còn thiếu ({wordsWithoutImages.length})
+							</Button>
+						)}
 						<Button
-							onClick={handleFetchAll}
-							icon={<Search className="w-4 h-4" />}
-							disabled={processing}
+							onClick={handleRefetchAll}
+							variant="secondary"
+							icon={<RefreshCw className="w-4 h-4" />}
+							disabled={processing || words.length === 0}
 						>
-							Tìm ảnh cho tất cả ({wordsWithoutImages.length} từ)
+							Tải lại toàn bộ ({words.length})
 						</Button>
-					)}
+					</div>
+				)}
 
-					{status && !processing && (status.startsWith('Đã') || status.startsWith('Hoàn')) && (
-						<div className="mt-3 text-sm text-green-600">{status}</div>
-					)}
-				</Card>
-			)}
+				{status && !processing && (status.startsWith('Đã') || status.startsWith('Hoàn')) && (
+					<div className="mt-3 text-sm text-green-600">{status}</div>
+				)}
+			</Card>
 
 			{/* ── Filter tabs ── */}
 			<div className="flex items-center gap-2">
