@@ -20,6 +20,7 @@ const WordleGamePage = lazy(() => import('@/pages/WordleGamePage').then(m => ({ 
 const SwipeFlashcardPage = lazy(() => import('@/pages/SwipeFlashcardPage').then(m => ({ default: m.SwipeFlashcardPage })))
 const ContextGamePage = lazy(() => import('@/pages/ContextGamePage').then(m => ({ default: m.ContextGamePage })))
 const DictionaryPage = lazy(() => import('@/pages/DictionaryPage').then(m => ({ default: m.DictionaryPage })))
+const SpeechGamePage = lazy(() => import('@/pages/SpeechGamePage').then(m => ({ default: m.SpeechGamePage })))
 
 function LoadingFallback() {
   return (
@@ -55,6 +56,7 @@ export const router = createHashRouter([
       { path: 'games/wordle', element: <Suspense fallback={<LoadingFallback />}><WordleGamePage /></Suspense> },
       { path: 'games/swipe', element: <Suspense fallback={<LoadingFallback />}><SwipeFlashcardPage /></Suspense> },
       { path: 'games/context', element: <Suspense fallback={<LoadingFallback />}><ContextGamePage /></Suspense> },
+      { path: 'games/speech', element: <Suspense fallback={<LoadingFallback />}><SpeechGamePage /></Suspense> },
       // Wind garden
       { path: 'wind', element: <Suspense fallback={<LoadingFallback />}><WindPage /></Suspense> },
       // Image Manager

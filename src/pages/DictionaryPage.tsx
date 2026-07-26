@@ -45,6 +45,16 @@ export function DictionaryPage() {
     }
   }
 
+  const translateTextAuto = async (text: string): Promise<string> => {
+    try {
+      const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q=${encodeURIComponent(text)}`)
+      const data = await res.json()
+      return data[0].map((item: any) => item[0]).join('')
+    } catch {
+      return text
+    }
+  }
+
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault()
     if (!query.trim()) return
@@ -57,9 +67,17 @@ export function DictionaryPage() {
     setSaveSuccess(false)
 
     try {
-      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(query.trim())}`)
+      let searchWord = query.trim()
+      const hasVietnamese = /[àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳýỵỷỹ]/i.test(searchWord)
+      
+      if (hasVietnamese) {
+        searchWord = await translateTextAuto(searchWord)
+        searchWord = searchWord.toLowerCase()
+      }
+
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(searchWord)}`)
       if (!res.ok) {
-        if (res.status === 404) throw new Error(`Không tìm thấy từ "${query}" trong từ điển.`)
+        if (res.status === 404) throw new Error(`Không tìm thấy từ "${searchWord}" trong từ điển.`)
         throw new Error('Có lỗi xảy ra khi tra từ.')
       }
       const data: DictResult[] = await res.json()

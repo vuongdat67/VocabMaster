@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, BookOpen, GraduationCap, Import, Settings,
-  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search
+  BarChart3, Repeat, ChevronLeft, Image, Link2, Wind, Camera, Music, VolumeX, Grid3x3, LayoutTemplate, Layers, Edit3, Search, Mic
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -23,6 +23,7 @@ const gameLinks = [
   { to: '/games/wordle', icon: LayoutTemplate, label: 'Đoán từ' },
   { to: '/games/swipe', icon: Layers, label: 'Quẹt thẻ' },
   { to: '/games/context', icon: Edit3, label: 'Điền từ' },
+  { to: '/games/speech', icon: Mic, label: 'Phát âm' },
   { to: '/wind', icon: Wind, label: 'Vườn Từ' },
 ]
 
