@@ -121,6 +121,11 @@ const LEVEL_NAMES: Record<LearningMode, string> = {
   fill_blank: 'Điền khuyết',
   matching: 'Ghép cặp',
   synonym_match: 'Đồng nghĩa',
+  crossword: 'Ô chữ',
+  wordle: 'Đoán từ',
+  swipe: 'Quẹt thẻ',
+  context: 'Điền từ',
+  wind: 'Vườn gió',
 }
 
 /** All exercise modes available for retry rotation. */

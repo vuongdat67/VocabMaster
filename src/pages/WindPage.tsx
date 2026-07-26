@@ -123,7 +123,7 @@ export function WindPage() {
     setActiveWord(null)
     setShowMeaning(false)
     loadWords()
-    if (settings.soundEnabled) playWindChime(0.5)
+    if (settings.sfxEnabled) playWindChime(0.5)
   }
 
   if (loading) {

@@ -170,6 +170,11 @@ const MODE_WEIGHTS: Record<LearningMode, ModeWeights | null> = {
   flashcard: { phonetic: 0.4, semantic: 0.6 },
   typing_challenge: null,
   fill_blank: null,
+  crossword: null,
+  wordle: null,
+  swipe: null,
+  context: null,
+  wind: null,
 }
 
 // ---------------------------------------------------------------------------

@@ -71,7 +71,7 @@ export function ContextGamePage() {
       return {
         word: w,
         sentenceParts: parts,
-        missingWord: parts[1]
+        missingWord: parts[1] || ''
       }
     })
 
@@ -248,7 +248,7 @@ export function ContextGamePage() {
             {!isChecked ? (
               <>
                 <Button 
-                  variant="outline" 
+                  variant="secondary" 
                   onClick={() => setShowHint(true)} 
                   disabled={showHint}
                   icon={<Lightbulb className="w-4 h-4" />}
