@@ -19,7 +19,9 @@ import {
 import { Card } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Badge } from '@/components/ui/Badge'
+import { StreakHeatmap } from '@/components/dashboard/StreakHeatmap'
 import { db, progressRepo } from '@/db'
+import { useAchievementStore } from '@/stores/achievement-store'
 import { useAvatarStore, fileToBase64 } from '@/stores/avatar-store'
 import { checkStreak } from '@/algorithms/review-scheduler'
 import { wordRepo } from '@/db/word-repo'
@@ -92,7 +94,7 @@ export function HomePage() {
         const streakData = await checkStreak()
         const masteryData = await progressRepo.getWordsByMastery()
 
-        setData({
+        const dashboardStats = {
           totalWordsLearned: srsAll.length,
           totalWords,
           totalCorrect,
@@ -108,7 +110,12 @@ export function HomePage() {
           learning: masteryData.learning,
           newWords: masteryData.new,
           totalStudyTime: totalTime,
-        })
+        }
+        
+        setData(dashboardStats)
+        
+        // Cập nhật achievements
+        useAchievementStore.getState().checkAchievements(dashboardStats)
 
         // Build weekly activity from session data
         const sessions = await db.sessions.toArray()
@@ -289,6 +296,8 @@ export function HomePage() {
           variant="success"
         />
       </div>
+
+      <StreakHeatmap />
 
       {/* ─── QUICK ACCESS ROW ───────────────────────── */}
       <div>

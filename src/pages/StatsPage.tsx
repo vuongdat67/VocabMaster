@@ -4,7 +4,8 @@ import { Card } from '@/components/ui/Card'
 import { db } from '@/db'
 import { checkStreak } from '@/algorithms/review-scheduler'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
-import { BookOpen, TrendingUp, Clock, Target, Brain, Zap } from 'lucide-react'
+import { BookOpen, TrendingUp, Clock, Target, Brain, Zap, Trophy } from 'lucide-react'
+import { ACHIEVEMENTS, useAchievementStore } from '@/stores/achievement-store'
 
 export function StatsPage() {
 	const [stats, setStats] = useState({
@@ -251,6 +252,26 @@ export function StatsPage() {
 					</div>
 				</div>
 			</Card>
+
+			{/* ─── BADGES / ACHIEVEMENTS ──────────────────── */}
+			<div className="mt-8">
+				<h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+					<Trophy className="w-5 h-5 text-yellow-500" />
+					Thành tựu của bạn
+				</h3>
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+					{ACHIEVEMENTS.map(a => {
+						const unlocked = useAchievementStore.getState().unlockedIds.includes(a.id)
+						return (
+							<Card key={a.id} className={`p-4 flex flex-col items-center text-center transition-all ${unlocked ? 'border-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/10' : 'opacity-50 grayscale'}`}>
+								<div className="w-12 h-12 text-3xl mb-2">{a.icon}</div>
+								<h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{a.title}</h4>
+								<p className="text-xs text-gray-500 mt-1">{a.description}</p>
+							</Card>
+						)
+					})}
+				</div>
+			</div>
 		</motion.div>
 	)
 }

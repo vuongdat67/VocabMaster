@@ -14,8 +14,9 @@ const mainLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/dictionary', icon: Search, label: 'Tra từ' },
   { to: '/learn', icon: GraduationCap, label: 'Học tập' },
+  { to: '/reading', icon: BookOpen, label: 'Góc đọc sách' },
   { to: '/review', icon: Repeat, label: 'Ôn tập' },
-  { to: '/words', icon: BookOpen, label: 'Từ vựng' },
+  { to: '/words', icon: Edit3, label: 'Từ vựng' },
 ]
 
 const gameLinks = [

@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/AppShell'
 const HomePage = lazy(() => import('@/pages/HomePage').then(m => ({ default: m.HomePage })))
 const LearningSessionPage = lazy(() => import('@/pages/LearningSessionPage').then(m => ({ default: m.LearningSessionPage })))
 const WordListPage = lazy(() => import('@/pages/WordListPage').then(m => ({ default: m.WordListPage })))
+const ReadingPage = lazy(() => import('@/pages/ReadingPage').then(m => ({ default: m.ReadingPage })))
 const WordDetailPage = lazy(() => import('@/pages/WordDetailPage').then(m => ({ default: m.WordDetailPage })))
 const ImportPage = lazy(() => import('@/pages/ImportPage').then(m => ({ default: m.ImportPage })))
 const ReviewPage = lazy(() => import('@/pages/ReviewPage').then(m => ({ default: m.ReviewPage })))
@@ -44,6 +45,7 @@ export const router = createHashRouter([
       { index: true, element: <Suspense fallback={<LoadingFallback />}><HomePage /></Suspense> },
       { path: 'auth', element: <Suspense fallback={<LoadingFallback />}><AuthPage /></Suspense> },
       { path: 'learn', element: <Suspense fallback={<LoadingFallback />}><LearningSessionPage /></Suspense> },
+      { path: 'reading', element: <Suspense fallback={<LoadingFallback />}><ReadingPage /></Suspense> },
       { path: 'words', element: <Suspense fallback={<LoadingFallback />}><WordListPage /></Suspense> },
       { path: 'words/:id', element: <Suspense fallback={<LoadingFallback />}><WordDetailPage /></Suspense> },
       { path: 'dictionary', element: <Suspense fallback={<LoadingFallback />}><DictionaryPage /></Suspense> },

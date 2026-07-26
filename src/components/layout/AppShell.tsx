@@ -6,6 +6,7 @@ import { MascotWidget } from '@/components/mascot/MascotWidget'
 import { WindChimeWidget } from '@/components/effects/WindChimeWidget'
 import { FloatingParticles } from '@/components/effects/FloatingParticles'
 import { ReviewReminder } from '@/components/effects/ReviewReminder'
+import { AchievementPopup } from '@/components/ui/AchievementPopup'
 import { startWindAmbient, stopWindAmbient } from '@/lib/sound-manager'
 import { useUIStore } from '@/stores/ui-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -48,6 +49,7 @@ export function AppShell() {
  <WindChimeWidget />
  <FloatingParticles />
  <ReviewReminder />
+ <AchievementPopup />
  </div>
  )
 }
