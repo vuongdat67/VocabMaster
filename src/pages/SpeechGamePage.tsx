@@ -16,7 +16,7 @@ declare global {
 const STORAGE_KEY = 'speech_game_state'
 
 export function SpeechGamePage() {
-  const { playCorrect, playWrong } = useSoundEffects()
+  const { playCorrect, playWrong, initSound } = useSoundEffects()
   const [words, setWords] = useState<Word[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isListening, setIsListening] = useState(false)
@@ -124,6 +124,7 @@ export function SpeechGamePage() {
   }
 
   const toggleListen = () => {
+    initSound() // user interaction allows audio context to start
     if (isListening) {
       recognition?.stop()
       setIsListening(false)

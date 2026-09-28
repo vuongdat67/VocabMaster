@@ -86,12 +86,32 @@ function ArticleReader({ article, onBack }: { article: Article; onBack: () => vo
 
     try {
       const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${cleanWord}`)
+      let dataToSet: any = {}
       if (res.ok) {
         const data = await res.json()
-        setDictData(data[0])
+        dataToSet = data[0] || {}
       } else {
-        setDictData({ error: 'Không tìm thấy từ này.' })
+        // Fallback to Google Translate if word not found
+        dataToSet = {
+          word: cleanWord,
+          phonetic: '',
+          meanings: [{ partOfSpeech: 'unknown', definitions: [{ definition: cleanWord, synonyms: [], antonyms: [] }] }]
+        }
       }
+      
+      // Translate the first definition
+      if (dataToSet.meanings?.[0]?.definitions?.[0]) {
+        try {
+          const textToTranslate = dataToSet.meanings[0].definitions[0].definition
+          const transRes = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=${encodeURIComponent(textToTranslate)}`)
+          const transData = await transRes.json()
+          const vi = transData[0].map((item: any) => item[0]).join('')
+          dataToSet.meanings[0].definitions[0].vietnamese = vi
+        } catch (e) {
+          // ignore translation error
+        }
+      }
+      setDictData(dataToSet)
     } catch (e) {
       setDictData({ error: 'Lỗi kết nối mạng.' })
     } finally {
@@ -114,7 +134,7 @@ function ArticleReader({ article, onBack }: { article: Article; onBack: () => vo
         partOfSpeech: dictData.meanings[0]?.partOfSpeech || 'noun',
         definitions: [{
           meaning: dictData.meanings[0]?.definitions[0]?.definition || '',
-          vietnamese: ''
+          vietnamese: dictData.meanings[0]?.definitions[0]?.vietnamese || ''
         }],
         examples: dictData.meanings[0]?.definitions[0]?.example 
           ? [{ sentence: dictData.meanings[0]?.definitions[0]?.example, vietnamese: '' }]
@@ -241,7 +261,8 @@ function ArticleReader({ article, onBack }: { article: Article; onBack: () => vo
             {wordOffsets.map((wObj, i) => {
               const isClickable = /[a-zA-Z]/.test(wObj.word)
               const contentCharIndex = currentBoundary - titleOffset
-              const isHighlighted = (isPlaying || isPaused) && contentCharIndex >= wObj.start && contentCharIndex < wObj.end
+              const nextWordStart = wordOffsets[i + 2]?.start ?? Infinity // skip space token by looking 2 ahead
+              const isHighlighted = (isPlaying || isPaused) && contentCharIndex >= wObj.start && contentCharIndex < nextWordStart
               const highlightClass = isHighlighted ? 'bg-amber-200 dark:bg-amber-500/40 text-amber-900 dark:text-amber-100' : ''
               
               if (!isClickable) return <span key={i} className={highlightClass}>{wObj.word}</span>
@@ -316,6 +337,9 @@ function ArticleReader({ article, onBack }: { article: Article; onBack: () => vo
                         <div key={idx}>
                           <p className="font-semibold text-blue-600 dark:text-blue-400 text-xs italic">{m.partOfSpeech}</p>
                           <p className="text-gray-700 dark:text-gray-300 mt-1">{m.definitions[0].definition}</p>
+                          {m.definitions[0].vietnamese && (
+                            <p className="text-blue-600 dark:text-blue-400 text-sm mt-1 font-medium">{m.definitions[0].vietnamese}</p>
+                          )}
                         </div>
                       ))}
                     </div>

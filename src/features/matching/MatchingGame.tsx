@@ -338,7 +338,7 @@ export function MatchingGame() {
                 }}
               >
                 <div className="min-w-0">
-                  <span className={`text-base font-bold block leading-tight ${isMatched ? 'text-gray-400' : 'text-gray-900'}`}>
+                  <span className={`text-base font-bold block leading-tight ${isMatched ? 'text-gray-400' : 'text-gray-900 dark:text-gray-100'}`}>
                     {item.content}
                   </span>
                   {item.vietnamese && (

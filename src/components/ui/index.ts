@@ -1,5 +1,6 @@
 export { Button } from './Button'
-export { ThemeSwitcher } from './ThemeSwitcher'
+export * from './ThemeSwitcher'
+export * from './FolderTree'
 export { FolderEditModal } from './FolderEditModal'
 export { Card } from './Card'
 export { Badge } from './Badge'

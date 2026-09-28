@@ -31,6 +31,7 @@ export interface Word {
   imageUrls: string[]
   audioUrl?: string
   tags: string[]
+  folderId?: string
   difficulty: 1 | 2 | 3 | 4 | 5
   createdAt: number
   updatedAt: number

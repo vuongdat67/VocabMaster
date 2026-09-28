@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { syncEngine } from '@/lib/sync-engine'
 import { generateTopicWords } from '@/lib/topic-generator'
 import { v4 as uuidv4 } from 'uuid'
+import { folderRepo } from '@/db/folder-repo'
 
 export function ExplorePage() {
   const [selectedPack, setSelectedPack] = useState<WordPack | null>(null)
@@ -21,10 +22,22 @@ export function ExplorePage() {
   const handleImport = async (pack: WordPack) => {
     setImporting(true)
     try {
+      // Create a folder for this pack
+      const folderId = crypto.randomUUID()
+      await folderRepo.add({
+        id: folderId,
+        name: pack.title,
+        color: 'blue',
+        icon: '📁',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      })
+
       const wordsToImport = pack.words.map(w => ({
         ...w,
         id: crypto.randomUUID(),
         userId: user?.id,
+        folderId, // Add to the new folder
         createdAt: Date.now(),
         updatedAt: Date.now()
       }))

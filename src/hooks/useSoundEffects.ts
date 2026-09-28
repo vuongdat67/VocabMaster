@@ -5,6 +5,16 @@ export function useSoundEffects() {
   const { sfxEnabled, soundVolume } = useSettingsStore(state => state.settings)
   const audioCtxRef = useRef<AudioContext | null>(null)
 
+  const initSound = useCallback(() => {
+    if (!sfxEnabled) return
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+    }
+    if (audioCtxRef.current.state === 'suspended') {
+      audioCtxRef.current.resume()
+    }
+  }, [sfxEnabled])
+
   const getContext = useCallback(() => {
     if (!sfxEnabled) return null
     if (!audioCtxRef.current) {
@@ -68,5 +78,5 @@ export function useSoundEffects() {
     osc.stop(now + 0.1)
   }, [getContext, soundVolume])
 
-  return { playCorrect, playWrong, playPop }
+  return { playCorrect, playWrong, playPop, initSound }
 }

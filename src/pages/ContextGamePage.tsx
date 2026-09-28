@@ -143,6 +143,7 @@ export function ContextGamePage() {
     if (e.key === 'Enter') {
       if (e.repeat) return
       e.preventDefault()
+      e.stopPropagation()
       if (isChecked) nextQuestion()
       else checkAnswer()
     }

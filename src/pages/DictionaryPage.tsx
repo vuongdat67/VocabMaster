@@ -77,9 +77,23 @@ export function DictionaryPage() {
 
       const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(searchWord)}`)
       if (!res.ok) {
-        if (res.status === 404) throw new Error(`Không tìm thấy từ "${searchWord}" trong từ điển.`)
+        if (res.status === 404) {
+          // Fallback to Google Translate if word not found in Dictionary API
+          const viTrans = await translateText(searchWord)
+          setResult({
+            word: searchWord,
+            phonetics: [],
+            meanings: [{
+              partOfSpeech: 'unknown',
+              definitions: [{ definition: searchWord, synonyms: [], antonyms: [] }]
+            }]
+          })
+          setTranslatedMeanings({ '0-0': viTrans })
+          return
+        }
         throw new Error('Có lỗi xảy ra khi tra từ.')
       }
+      
       const data: DictResult[] = await res.json()
       if (!data || data.length === 0) throw new Error('Không tìm thấy từ này.')
       
@@ -87,20 +101,26 @@ export function DictionaryPage() {
       if (!firstResult) throw new Error('Không tìm thấy từ này.')
       
       setResult(firstResult)
-      
       setIsTranslating(true)
       const tMeanings: Record<string, string> = {}
       const tExamples: Record<string, string> = {}
-      
       const promises: Promise<void>[] = []
+
+      // Limit the number of translations to prevent rate limit (429) from Google Translate
+      // Translate the search word itself to get a short Vietnamese meaning
+      promises.push(translateText(searchWord).then(vi => { tMeanings['word'] = vi }))
       
+      let transCount = 0
       firstResult.meanings?.forEach((m, mIdx) => {
         m.definitions.forEach((d, dIdx) => {
-          if (d.definition) {
-            promises.push(translateText(d.definition).then(vi => { tMeanings[`${mIdx}-${dIdx}`] = vi }))
-          }
-          if (d.example) {
-            promises.push(translateText(d.example).then(vi => { tExamples[`${mIdx}-${dIdx}`] = vi }))
+          if (transCount < 2) {
+            if (d.definition) {
+              promises.push(translateText(d.definition).then(vi => { tMeanings[`${mIdx}-${dIdx}`] = vi }))
+            }
+            if (d.example) {
+              promises.push(translateText(d.example).then(vi => { tExamples[`${mIdx}-${dIdx}`] = vi }))
+            }
+            transCount++
           }
         })
       })
@@ -147,7 +167,12 @@ export function DictionaryPage() {
       ;(result.meanings || []).forEach((m, mIdx) => {
         ;(m.definitions || []).forEach((d, dIdx) => {
           if (d.definition) {
-            definitions.push({ meaning: d.definition, vietnamese: translatedMeanings[`${mIdx}-${dIdx}`] || '' })
+            // For the first definition, use the short word translation as well if available
+            let viMean = translatedMeanings[`${mIdx}-${dIdx}`] || ''
+            if (mIdx === 0 && dIdx === 0 && translatedMeanings['word']) {
+              viMean = translatedMeanings['word']
+            }
+            definitions.push({ meaning: d.definition, vietnamese: viMean })
           }
           if (d.example) {
             examples.push({ sentence: d.example, vietnamese: translatedExamples[`${mIdx}-${dIdx}`] || '' })
@@ -162,10 +187,10 @@ export function DictionaryPage() {
         word: result.word,
         ipa: phonetic,
         partOfSpeech: primaryPos,
-        definitions: definitions.slice(0, 3), // Limit to 3 best meanings
-        examples: examples.slice(0, 3),
-        synonyms: Array.from(synonyms).slice(0, 5),
-        antonyms: Array.from(antonyms).slice(0, 5),
+        definitions, // Lưu tất cả định nghĩa
+        examples,    // Lưu tất cả ví dụ
+        synonyms: Array.from(synonyms), // Lưu tất cả từ đồng nghĩa
+        antonyms: Array.from(antonyms), // Lưu tất cả từ trái nghĩa
         imageUrls: [],
         audioUrl,
         tags: ['dictionary', 'saved'],
@@ -226,6 +251,11 @@ export function DictionaryPage() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
               <div>
                 <h2 className="text-5xl font-extrabold text-gray-900 tracking-tight capitalize mb-2">{result.word}</h2>
+                {isTranslating ? (
+                   <div className="h-6 w-32 bg-gray-100 animate-pulse rounded mb-2"></div>
+                ) : translatedMeanings['word'] ? (
+                   <p className="text-2xl font-bold text-accent-600 mb-2 capitalize">{translatedMeanings['word']}</p>
+                ) : null}
                 <div className="flex items-center gap-4 text-gray-500">
                   {phoneticText && <span className="text-xl font-medium">{phoneticText}</span>}
                   {bestAudio && (

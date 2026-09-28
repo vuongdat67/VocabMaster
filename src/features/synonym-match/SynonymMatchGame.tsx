@@ -372,7 +372,7 @@ export function SynonymMatchGame() {
  layout
  onClick={() => handleLeftClick(item.id)}
  disabled={isMatched}
- className={`w-full px-4 py-3 rounded-xl border-2 font-semibold text-gray-900 transition-all text-center ${getStyle(item.id, item.pairId)} ${isMatched ? 'cursor-default' : 'cursor-pointer'}`}
+ className={`w-full px-4 py-3 rounded-xl border-2 font-semibold text-gray-900 dark:text-gray-100 transition-all text-center ${getStyle(item.id, item.pairId)} ${isMatched ? 'cursor-default' : 'cursor-pointer'}`}
  whileTap={!isMatched ? { scale: 0.97 } : undefined}
  >
  <div>{item.text}</div>
@@ -396,7 +396,7 @@ export function SynonymMatchGame() {
  layout
  onClick={() => handleRightClick(item.id)}
  disabled={isMatched}
- className={`w-full px-4 py-3 rounded-xl border-2 font-medium text-gray-700 transition-all text-center text-sm ${getStyle(item.id, item.pairId)} ${isMatched ? 'cursor-default' : 'cursor-pointer'}`}
+ className={`w-full px-4 py-3 rounded-xl border-2 font-medium text-gray-700 dark:text-gray-200 transition-all text-center text-sm ${getStyle(item.id, item.pairId)} ${isMatched ? 'cursor-default' : 'cursor-pointer'}`}
  whileTap={!isMatched ? { scale: 0.97 } : undefined}
  >
  {item.text}

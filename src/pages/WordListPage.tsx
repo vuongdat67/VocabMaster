@@ -12,6 +12,7 @@ import { useAudio } from '@/hooks/useAudio'
 import { useLearningSession } from '@/hooks/useLearningSession'
 import { WordEditModal } from '@/components/ui/WordEditModal'
 import { FolderEditModal } from '@/components/ui/FolderEditModal'
+import { FolderTree } from '@/components/ui/FolderTree'
 import { v4 as uuidv4 } from 'uuid'
 import { getImageForWord } from '@/lib/image-search'
 import type { Word, PartOfSpeech } from '@/types/word'
@@ -84,6 +85,7 @@ export function WordListPage() {
 	const [editWord, setEditWord] = useState<Word | null>(null)
 	const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
 	const [editFolder, setEditFolder] = useState<Folder | null>(null)
+	const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
 	// Dropdown filter states
 	const [statusFilter, setStatusFilter] = useState<'all' | 'studied' | 'unstudied'>('all')
@@ -149,9 +151,9 @@ export function WordListPage() {
 			})
 		}
 
-		// Tag filter
+		// Tag or Folder filter
 		if (selectedTag) {
-			result = result.filter((w) => w.tags.includes(selectedTag))
+			result = result.filter((w) => w.tags.includes(selectedTag) || w.folderId === selectedTag)
 		}
 
 		// Status filter (based on SRS data existence)
@@ -281,6 +283,14 @@ export function WordListPage() {
 			{/* Heading row with inline filter dropdowns */}
 			<div className="flex flex-wrap items-start gap-3">
 				<div className="min-w-0 flex items-center gap-4">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+						icon={<FolderIcon className="w-5 h-5" />}
+						title={isSidebarOpen ? "Ẩn thư mục" : "Hiện thư mục"}
+					>
+					</Button>
 					<div>
 						<h2 className="text-2xl font-bold text-gray-900 tracking-tight">Từ vựng</h2>
 						<p className="text-sm text-gray-500">{filtered.length} từ</p>
@@ -336,60 +346,79 @@ export function WordListPage() {
 				</div>
 			</div>
 
-			{/* Tag filter pills / Folders */}
-			{(tags.length > 0 || folders.length > 0) && (
-				<div className="flex flex-wrap gap-2 mb-4 bg-gray-50/50 p-3 rounded-xl border border-gray-100 dark:bg-gray-800/30 dark:border-gray-700 items-center">
-					<div className="w-full flex justify-between items-center mb-1">
-						<span className="text-sm font-semibold text-gray-500">Thư mục & Chủ đề</span>
-						<Button size="sm" variant="ghost" className="text-gray-400 hover:text-gray-700" onClick={() => { setEditFolder(null); setIsFolderModalOpen(true); }}>
-							<Plus className="w-4 h-4 mr-1" /> Tạo thư mục
-						</Button>
-					</div>
-					<button
-						onClick={() => handleTagFilter(null)}
-						className={`px-4 py-1.5 rounded-xl text-sm transition-all flex items-center gap-1.5 ${
-							selectedTag === null
-								? 'text-white shadow-md'
-								: 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700'
-						}`}
-						style={selectedTag === null ? { backgroundColor: 'var(--accent-500)' } : undefined}
-					>
-						<LibraryBig className="w-4 h-4" /> Tất cả
-					</button>
-					
-					{/* Map over unique tags/folders */}
-					{Array.from(new Set([...tags, ...folders.map(f => f.id)])).map((tagOrFolderId) => {
-						const folder = folders.find(f => f.id === tagOrFolderId)
-						const displayName = folder ? folder.name : tagOrFolderId.replace('-', ' ')
-						const icon = folder ? folder.icon : '📁'
-						const bgClass = selectedTag === tagOrFolderId 
-							? (folder ? folder.color : 'bg-blue-500') 
-							: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+			{/* Main Content Area */}
+			<div className="flex flex-col md:flex-row gap-6 h-[calc(100vh-12rem)] min-h-[500px]">
+				
+				{/* Sidebar (Folders & Tags) */}
+				<AnimatePresence>
+					{isSidebarOpen && (
+						<motion.div 
+							initial={{ width: 0, opacity: 0 }}
+							animate={{ width: 260, opacity: 1 }}
+							exit={{ width: 0, opacity: 0 }}
+							className="flex flex-col gap-4 shrink-0 overflow-hidden"
+						>
+							<div className="flex-1 bg-white dark:bg-gray-800 rounded-2xl p-3 border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col">
+								<div className="flex items-center justify-between mb-3 px-1">
+									<h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Thư mục</h2>
+									<Button size="sm" variant="ghost" className="p-1 h-7 w-7 rounded hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => { setEditFolder(null); setIsFolderModalOpen(true); }}>
+										<Plus className="w-4 h-4" />
+									</Button>
+								</div>
+								<div className="flex-1 overflow-y-auto overflow-x-hidden pr-2">
+									<FolderTree 
+										folders={folders}
+										selectedFolderId={selectedTag}
+										onSelectFolder={setSelectedTag}
+										onAddFolder={(parentId?: string | null) => { setEditFolder({ id: '', name: '', icon: '📁', color: '#3b82f6', parentId: parentId || undefined, createdAt: Date.now(), updatedAt: Date.now() }); setIsFolderModalOpen(true); }}
+										onEditFolder={(folder: Folder) => { setEditFolder(folder); setIsFolderModalOpen(true); }}
+										onDeleteFolder={async (id: string) => {
+											const f = folders.find(fd => fd.id === id)
+											if (window.confirm(`Xóa thư mục "${f?.name || ''}" và các thư mục con? Các từ vựng bên trong sẽ không bị xóa.`)) {
+												await folderRepo.delete(id)
+												setFolders(await folderRepo.getAll())
+												if (selectedTag === id) setSelectedTag(null)
+											}
+										}}
+										onMoveFolder={async (folderId: string, newParentId: string | null) => {
+											await folderRepo.update(folderId, { parentId: newParentId || undefined })
+											setFolders(await folderRepo.getAll())
+										}}
+										onDropWords={async (wordIds: string[], targetFolderId: string) => {
+											for (const wId of wordIds) {
+												await wordRepo.update(wId, { folderId: targetFolderId })
+											}
+											setWords(await wordRepo.getAll())
+										}}
+									/>
 
-						return (
-							<div key={tagOrFolderId} className="group relative flex items-center">
-								<button
-									onClick={() => handleTagFilter(tagOrFolderId)}
-									className={`px-4 py-1.5 rounded-xl text-sm transition-all flex items-center gap-1.5 capitalize ${
-										selectedTag === tagOrFolderId ? 'text-white shadow-md ' + bgClass : bgClass
-									}`}
-									style={selectedTag === tagOrFolderId && !folder ? { backgroundColor: 'var(--accent-500)' } : undefined}
-								>
-									<span>{icon}</span> {displayName}
-								</button>
-								{folder && (
-									<button 
-										onClick={(e) => { e.stopPropagation(); setEditFolder(folder); setIsFolderModalOpen(true); }}
-										className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full p-1 text-gray-400 hover:text-blue-500 transition-opacity shadow-sm"
-									>
-										<Edit className="w-3 h-3" />
-									</button>
-								)}
+									<div className="mt-6 space-y-1">
+										<h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-2 mb-2">Thẻ hệ thống</h3>
+										{['my-list', 'saved', 'dictionary', 'game'].map(t => (
+											<button
+												key={t}
+												onClick={() => setSelectedTag(t === selectedTag ? null : t)}
+												className={`w-full text-left px-3 py-2 rounded-xl text-sm transition-colors ${
+													selectedTag === t
+														? 'bg-accent-50 text-accent-700 font-medium dark:bg-accent-900/30 dark:text-accent-300'
+														: 'text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50'
+												}`}
+											>
+												<span className="capitalize">#{t.replace('-', ' ')}</span>
+												<span className="float-right text-gray-400 text-xs mt-0.5">
+													{words.filter(w => w.tags.includes(t)).length}
+												</span>
+											</button>
+										))}
+									</div>
+								</div>
 							</div>
-						)
-					})}
-				</div>
-			)}
+						</motion.div>
+					)}
+				</AnimatePresence>
+
+				{/* Right side: Word Cards Grid */}
+				<div className="flex-1 min-w-0 flex flex-col gap-4">
 
 			<FolderEditModal 
 				isOpen={isFolderModalOpen}
@@ -448,11 +477,19 @@ export function WordListPage() {
 							animate={{ opacity: 1, y: 0 }}
 							layout
 						>
-							<Card
-								className="h-28 p-3 overflow-hidden"
-								onClick={() => setSelectedWord(w)}
-								hover
+							<div
+								draggable
+								onDragStart={(e: React.DragEvent) => {
+									e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'words', wordIds: [w.id] }))
+									e.dataTransfer.effectAllowed = 'copyMove'
+								}}
+								className="h-full"
 							>
+								<Card
+									className="h-28 p-3 overflow-hidden cursor-grab active:cursor-grabbing group relative"
+									onClick={() => setSelectedWord(w)}
+									hover
+								>
 								<div className="flex items-start gap-3">
 									{/* Image / first-letter placeholder */}
 									<div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden">
@@ -483,45 +520,44 @@ export function WordListPage() {
 											<div className="flex items-center">
 												<button
 													onClick={(e) => handleToggleMyList(w, e)}
-													className={`p-1 rounded hover:bg-gray-100 flex-shrink-0 ${w.tags.includes('my-list') ? 'text-yellow-400' : 'text-gray-300'}`}
-													title="Thêm vào Từ vựng của tôi"
+													className={`p-1.5 rounded-md hover:bg-gray-100 transition-colors opacity-0 group-hover:opacity-100 ${
+														w.tags.includes('my-list') ? 'text-accent-500 opacity-100' : 'text-gray-400'
+													}`}
 												>
-													<Star className="w-3.5 h-3.5" fill={w.tags.includes('my-list') ? 'currentColor' : 'none'} />
+													<Star className={`w-3.5 h-3.5 ${w.tags.includes('my-list') ? 'fill-current' : ''}`} />
 												</button>
 												<button
-													onClick={(e) => {
-														e.stopPropagation()
-														speak(w.word)
-													}}
-													className="p-1 rounded hover:bg-gray-100 text-gray-400 flex-shrink-0"
+													onClick={(e) => { e.stopPropagation(); speak(w.word) }}
+													className="p-1.5 text-gray-400 hover:text-accent-500 hover:bg-gray-100 rounded-md transition-colors"
 												>
 													<Volume2 className="w-3.5 h-3.5" />
 												</button>
 											</div>
 										</div>
-										{w.ipa && (
-											<p className="text-xs text-gray-400 truncate leading-4">{w.ipa}</p>
-										)}
-										<p className="text-sm text-gray-500 truncate leading-5">
-											{w.definitions[0]?.vietnamese ?? '...'}
-										</p>
-										<div className="flex flex-wrap gap-1 mt-1">
-											<Badge variant="info" className="text-[10px] px-1.5 py-0.5">
+										<p className="text-gray-500 text-xs italic mb-1.5">{w.ipa}</p>
+										<div className="flex flex-wrap gap-1 mt-auto">
+											<Badge variant="info" className="text-[10px] px-1.5 py-0 h-4">
 												{w.partOfSpeech}
 											</Badge>
-											{w.tags.slice(0, 2).map((t) => (
-												<Badge key={t} className="text-[10px] px-1.5 py-0.5">
-													{t}
-												</Badge>
-											))}
+											{w.tags.map(t => {
+												const f = folders.find(fd => fd.id === t)
+												return (
+													<Badge key={t} variant="default" className="text-[10px] px-1.5 py-0 h-4 truncate max-w-[80px]" style={f ? { borderColor: f.color, color: f.color, backgroundColor: 'transparent' } : {}}>
+														{f ? f.name : t.replace('-', ' ')}
+													</Badge>
+												)
+											})}
 										</div>
 									</div>
 								</div>
-							</Card>
+								</Card>
+							</div>
 						</motion.div>
 					)
 				})}
 			</div>
+			</div> {/* End Right Side */}
+			</div> {/* End Main Area */}
 
 			{filtered.length === 0 && (
 				<div className="text-center py-16 text-gray-400">

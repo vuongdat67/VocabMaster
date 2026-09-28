@@ -58,28 +58,44 @@
 
 /* ─── KidSpace Theme ──────────── */
 :root:has(input.theme-controller[value=kidspace]:checked),
-[data-theme="kidspace"] {
+[data-theme-preset="kidspace"] {
   color-scheme: light;
-  --color-primary: #FFB3BA; /* pastel pink */
-  --color-primary-content: #5A3E40;
-  --color-secondary: #BAE1FF; /* pastel blue */
-  --color-secondary-content: #2B455E;
-  --color-accent: #FFFFBA; /* pastel yellow */
-  --color-accent-content: #6B6B38;
-  --color-neutral: #C1E1C1; /* pastel green */
-  --color-neutral-content: #2F4D2F;
-  --color-base-100: #FFF5F7;
-  --color-base-200: #FDE8ED;
-  --color-base-300: #FAD1D8;
-  --color-base-content: #5A4E51;
-  --color-info: #B5EAD7;
-  --color-info-content: #2B4D3F;
-  --color-success: #C7CEEA;
-  --color-success-content: #3F4462;
-  --color-warning: #FFDAC1;
-  --color-warning-content: #5E4631;
-  --color-error: #FF9AA2;
-  --color-error-content: #5E262B;
+  --color-primary: #8AB4F8; /* pastel blue main */
+  --color-primary-content: #1A365D;
+  --color-secondary: #FFD166; /* pastel yellow */
+  --color-secondary-content: #594200;
+  --color-accent: #06D6A0; /* mint green */
+  --color-accent-content: #003628;
+  --color-neutral: #E0E7FF; /* soft indigo */
+  --color-neutral-content: #3730A3;
+  --color-base-100: #F8FAFC; /* clean slate */
+  --color-base-200: #F1F5F9;
+  --color-base-300: #E2E8F0;
+  --color-base-content: #334155;
+  --color-info: #93C5FD;
+  --color-info-content: #1E3A8A;
+  --color-success: #86EFAC;
+  --color-success-content: #14532D;
+  --color-warning: #FDE047;
+  --color-warning-content: #713F12;
+  --color-error: #FCA5A5;
+  --color-error-content: #7F1D1D;
+}
+
+html.dark [data-theme-preset="kidspace"] {
+  color-scheme: dark;
+  --color-primary: #8AB4F8; 
+  --color-primary-content: #0F172A;
+  --color-secondary: #FFD166;
+  --color-secondary-content: #0F172A;
+  --color-accent: #06D6A0;
+  --color-accent-content: #0F172A;
+  --color-neutral: #1E293B;
+  --color-neutral-content: #E2E8F0;
+  --color-base-100: #0F172A; /* deep space */
+  --color-base-200: #1E293B;
+  --color-base-300: #334155;
+  --color-base-content: #F8FAFC;
 }
 
 /* ─── KidSpace Global & Background ──────────── */
@@ -87,39 +103,53 @@ body {
   font-family: 'Nunito', sans-serif !important;
 }
 
-[data-theme="kidspace"] {
-  background-color: #f0f8ff;
+[data-theme-preset="kidspace"] {
+  background-color: #F8FAFC;
   background-image: 
-    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%),
-    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%),
-    linear-gradient(180deg, #e3f2fd 0%, #fff9f0 100%);
+    radial-gradient(circle at 15% 50%, rgba(138, 180, 248, 0.1) 0%, rgba(138, 180, 248, 0) 50%),
+    radial-gradient(circle at 85% 30%, rgba(6, 214, 160, 0.05) 0%, rgba(6, 214, 160, 0) 50%);
   background-attachment: fixed;
 }
 
+html.dark [data-theme-preset="kidspace"] {
+  background-color: #0F172A;
+  background-image: 
+    radial-gradient(circle at 20% 40%, rgba(138, 180, 248, 0.15) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(circle at 80% 60%, rgba(255, 209, 102, 0.1) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(2px 2px at 10% 20%, rgba(255, 255, 255, 0.8) 100%, transparent),
+    radial-gradient(2px 2px at 30% 50%, rgba(255, 255, 255, 0.5) 100%, transparent),
+    radial-gradient(2px 2px at 80% 15%, rgba(255, 255, 255, 0.8) 100%, transparent);
+}
+
 /* ─── KidSpace Clay Style Overrides ──────────── */
-[data-theme="kidspace"] .card,
-[data-theme="kidspace"] .btn,
-[data-theme="kidspace"] button,
-[data-theme="kidspace"] input,
-[data-theme="kidspace"] select,
-[data-theme="kidspace"] .bg-white {
+[data-theme-preset="kidspace"] .card,
+[data-theme-preset="kidspace"] .btn,
+[data-theme-preset="kidspace"] button,
+[data-theme-preset="kidspace"] input,
+[data-theme-preset="kidspace"] select,
+[data-theme-preset="kidspace"] .bg-white {
   border-radius: 1.5rem !important; /* rounded-3xl */
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-[data-theme="kidspace"] .card {
+[data-theme-preset="kidspace"] .card {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01), inset 0 -4px 0 rgba(0,0,0,0.02) !important;
   border: 4px solid #ffffff !important;
   background-color: rgba(255,255,255,0.9) !important;
   backdrop-filter: blur(10px);
 }
 
-[data-theme="kidspace"] .card:hover {
+html.dark [data-theme-preset="kidspace"] .card {
+  border: 4px solid #334155 !important;
+  background-color: rgba(30,41,59,0.9) !important;
+}
+
+[data-theme-preset="kidspace"] .card:hover {
   transform: translateY(-4px) scale(1.01);
   box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1), 0 10px 15px -5px rgba(0, 0, 0, 0.04), inset 0 -4px 0 rgba(0,0,0,0.02) !important;
 }
 
-[data-theme="kidspace"] .btn {
+[data-theme-preset="kidspace"] .btn {
   box-shadow: 0 4px 0 0 color-mix(in srgb, currentColor 20%, transparent) !important;
   transition: all 0.1s !important;
   font-weight: 700 !important;

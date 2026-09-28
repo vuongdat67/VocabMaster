@@ -15,7 +15,22 @@ export const folderRepo = {
   },
 
   async delete(id: string): Promise<void> {
-    await db.folders.delete(id)
+    const all = await this.getAll()
+    const idsToDelete = new Set<string>([id])
+    
+    // Find all children recursively
+    let changed = true
+    while (changed) {
+      changed = false
+      for (const f of all) {
+        if (f.parentId && idsToDelete.has(f.parentId) && !idsToDelete.has(f.id)) {
+          idsToDelete.add(f.id)
+          changed = true
+        }
+      }
+    }
+    
+    await db.folders.bulkDelete(Array.from(idsToDelete))
   },
 
   async bulkAdd(folders: Folder[]): Promise<void> {
